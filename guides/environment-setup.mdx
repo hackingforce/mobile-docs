@@ -1,0 +1,22 @@
+export const metadata = {
+  title: 'Guias: Configurando o Ambiente'
+}
+
+# Configurando o Ambiente
+
+## Instalando o Android Studio
+Para realizar a comunicação e criação dos dispositivos virtuais vamos utilizar o Android Studio.
+
+> [Download Android Studio](https://developer.android.com/studio)
+
+Não existe muito segredo no processo de instalação, basta clicar em _next_ e _finish_.
+
+## Command not found: adb
+```bash
+echo 'export PATH=$PATH:$HOME/Android/sdk/platform-tools' >> ~/.zshrc
+source .zshrc
+```
+
+## Criando o Dispositivo Virtual Android (AVD)
+Um **AVD (Android Virtual Device)** é um emulador que simula dispositivos Android no computador. É usado para testar e depurar aplicativos em diferentes configurações de hardware e software. Os desenvolvedores podem criar AVDs com diversas versões do Android e tamanhos de tela, economizando tempo e recursos ao realizar testes sem dispositivos físicos.
+

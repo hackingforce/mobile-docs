@@ -1,0 +1,42 @@
+import { Book } from '@/components/ui/book'
+
+export const metadata = {
+    title: 'Vulnerabilidades: Detecção de Root'
+}
+
+# Detecção de Root
+Sabemos que o sistema operacional Android é baseado em UNIX onde ocorre uma segregação de usuários, quando você compra um dispositivo físico, você é um usuário de baixo privilegio, ou seja, tem ações limitadas. O que garante a integridade do ambiente.
+
+Quando passamos ser um super usuário, podemos fazer o que quisermos. Listar processos, diretórios, abrir portas, usar frameworks de instrumentação como frida, Xposed e etc.
+
+> [Download do APK para análise](https://github.com)
+
+## Mitigação
+- **Inspeção de Pacotes Suspeitos:** Para complementar a detecção de root, é fundamental realizar a análise de pacotes instalados no dispositivo. Gerenciadores de superusuário, como `thirdparty.superuser`, `eu.chainfire.supersu`, `com.noshufou.android.su`, e outros conhecidos, devem ser verificados periodicamente. A presença de qualquer pacote relacionado a ferramentas de root deve ser tratada como um indicativo de potencial comprometimento do dispositivo.
+
+## Análise Estática
+Como vimos na etapa de [Análise Estática](/starting/sast)...
+
+Ao analisar o código fonte do aplicativo, podemos identificar a verificação de root. No exemplo abaixo, o aplicativo utiliza a biblioteca `RootBeer` para verificar se o dispositivo está rooteado.
+
+```java showLineNumbers
+RootBeer rootBeer = new RootBeer(context);
+
+if (rootBeer.isRooted()) {
+    // Dispositivo rooteado
+} else {
+    // Dispositivo não rooteado
+}
+```
+
+## Bypass
+Depois de analisar o aplicativo e identificar a verificação de root, podemos usar o frida para interceptar a chamada e retornar um valor falso.
+
+```js showLineNumbers {4}
+Java.perform(() => {
+    const rootCheck = Java.use('com.scottyab.rootbeer.RootBeer');
+    rootCheck.isRooted.implementation = function() {
+        return false;
+    };
+});
+```

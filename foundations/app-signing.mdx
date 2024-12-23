@@ -1,0 +1,19 @@
+export const metadata = {
+  title: 'Fundamentos: Assinatura de Aplicativos'
+}
+
+# Assinatura de Aplicativos
+Em muitos casos pode ser necessário alterar o conteúdo de um APK. No entanto, após a modificação, o aplicativo precisa ser reassinado para que ele possa funcionar novamente em um dispositivo Android. Sem o processo de assinatura, o APK não será aceito pelo sistema Android, já que a assinatura garante a integridade e a autenticidade do aplicativo.
+
+## Por que o APK precisa ser assinado?
+A assinatura de um APK é um processo que garante que o APK não foi alterado após a sua compilação. A assinatura é feita com uma chave privada, que é usada para gerar um hash do APK. Esse hash é armazenado no arquivo `CERT.SF` e é assinado com a chave privada, gerando o arquivo `CERT.RSA`. O Android verifica a assinatura do APK para garantir que ele não foi alterado após a sua compilação.
+
+## Alinhando o APK
+Após assinar o APK, é necessário realizar o alinhamento dos bytes do arquivo, um processo chamado **zipalign**, que otimiza o APK para ser lido mais eficientemente pelo Android:
+
+```bash
+zipalign -v 4 myapp-unsigned.apk myapp.apk
+```
+
+## Por que alinhar o APK?
+O zipalign otimiza o acesso aos dados do APK, garantindo que as entradas do arquivo estejam alinhadas com limites de bytes. Isso melhora a eficiência da leitura do APK, resultando em uma execução mais rápida do aplicativo no dispositivo Android.

@@ -1,0 +1,54 @@
+export const metadata = {
+  title: 'Fundamentos: AndroidManifest.xml'
+}
+
+# AndroidManifest.xml
+O `AndroidManifest.xml` é um arquivo fundamental na estrutura de qualquer aplicação, servindo como um mapa que orienta o Android sobre como a aplicação deve se comportar. Esse arquivo é obrigatório em todos os projetos Android e deve estar localizado na raiz do diretório.
+
+Em resumo, nele são especificados detalhes importantes, como permissões necessárias, activities, serviços, broadcast receivers e outras configurações importantes que o sistema precisa para executar a aplicação corretamente.
+
+## Nome do Pacote
+O nome do pacote é um identificador único para a aplicação. Ele é usado pelo sistema operacional para identificar a aplicação e garantir que ela seja única no dispositivo. O nome do pacote é definido no atributo `package` da tag `<manifest>`.
+
+```xml
+<manifest 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.myapp"
+>
+```
+
+## Componentes
+Para cada componente criado no aplicativo, é declarado um elemento XML correspondente no `AndroidManifest.xml`:
+
+- [`<activity>`](https://developer.android.com/guide/topics/manifest/activity-element?hl=pt-br) para cada subclasse de [`Activity`](https://developer.android.com/reference/android/app/Activity?hl=pt-br).
+- [`<service>`](https://developer.android.com/guide/topics/manifest/service-element?hl=pt-br) para cada subclasse de [`Service`](https://developer.android.com/reference/android/app/Service?hl=pt-br).
+- [`<receiver>`](https://developer.android.com/guide/topics/manifest/receiver-element?hl=pt-br) para cada subclasse de [`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver?hl=pt-br).
+- [`<provider>`](https://developer.android.com/guide/topics/manifest/provider-element?hl=pt-br) para cada subclasse de [`ContentProvider`](https://developer.android.com/reference/android/content/ContentProvider?hl=pt-br).
+
+```xml
+<manifest ... >
+    <application ... >
+        <activity android:name=".MainActivity" ... />
+        <service android:name=".MyService" ... />
+    </application>
+</manifest>
+```
+
+## \<intent-filter>
+Os filtros de _intent_ definem como a aplicação responde a diferentes eventos ou _intent_. Permitem que `Activities` ou `Services` sejam iniciados com base em ações específicas do sistema ou de outros aplicativos.
+
+```xml
+<intent-filter>
+    <action android:name="android.accessibilityservice.AccessibilityService" />
+</intent-filter>
+```
+
+## Permissões
+Os apps Android precisam pedir acesso aos dados confidenciais do usuário, como contatos e SMS, ou determinados recursos do sistema, como a câmera e o acesso à Internet. 
+
+Cada permissão é identificada por um rótulo exclusivo no arquivo `AndroidManifest.xml` e são divididas em duas categorias: permissões normais e [permissões perigosas](/foundations/android-permissions).
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.CAMERA" />
+```

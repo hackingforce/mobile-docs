@@ -1,0 +1,18 @@
+export const metadata = {
+  title: 'Vulnerabilidades: FLAG_SECURE'
+}
+
+# FLAG_SECURE
+Nesta seção, iremos apresentar uma abordagem que pode ser utilizadas para burlar a `FLAG_SECURE`. Uma medida de segurança que informa ao Android para não permitir capturas de tela ou exibir a visualização da janela em uma tela não segura (como a transmissão do tela). 
+
+Isso é útil para aplicativos plicativos de bancos, de autenticação, de comércio eletrônico, ou qualquer outro aplicativo que exija a entrada de informações confidenciais do usuário.
+
+## Como saber se a FLAG_SECURE está ativada?
+Existem várias formas de validar se a `FLAG_SECURE` está presente no aplicativo. Podemos utilizar o `adb` para capturar a tela do dispositivo. 
+```bash
+adb shell screencap -p /sdcard/screen.png
+adb pull /sdcard/screen.png
+```
+
+## Bypass
+

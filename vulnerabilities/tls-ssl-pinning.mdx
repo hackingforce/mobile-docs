@@ -1,0 +1,69 @@
+export const metadata = {
+  title: 'Vulnerabilidades: TLS/SSL Pinning'
+}
+
+# TLS/SSL Pinning
+O SSL Pinning é uma técnica de segurança utilizada para proteger as comunicações entre um aplicativo e seu servidor. Essa abordagem funciona fixando informações específicas, como o certificado ou a chave pública do servidor, diretamente no código-fonte do aplicativo. 
+
+Aplicativos das áreas financeira, de saúde, governamental e corporativa são exemplos que frequentemente implementam (ou deveriam implementar) a pinagem de certificado para garantir a proteção dos dados sensíveis dos usuários.
+
+> [Download do APK para análise](https://github.com)
+
+## Deep Dive: Como funciona o SSL Pinning?
+Durante a comunicação, o aplicativo verifica se o certificado ou chave pública apresentados pelo servidor correspondem aos dados fixados. Se houver correspondência, a conexão é permitida; caso contrário, ela é bloqueada para evitar a transmissão de dados sensíveis.
+
+No modelo tradicional de SSL/TLS, os aplicativos confiam em diversas Autoridades Certificadoras (CAs), que têm permissão para emitir certificados para qualquer domínio. Com o SSL Pinning, a confiança nas CAs é substituída por uma validação direta entre o aplicativo e o servidor, dificultando a falsificação de certificados e reforçando a segurança.
+
+> **Observação:** Se um certificado fixado expirar ou for revogado e atualizado no servidor. Isso exige a atualização do aplicativo com o novo certificado ou chave.
+
+Exemplo de implementação de SSL Pinning em Java:
+
+```java showLineNumbers {9-11}
+import okhttp3.CertificatePinner;
+import okhttp3.OkHttpClient;
+
+public class Pinner {
+
+    public static void main(String[] args) {
+        String hostname = "example.com";
+
+        CertificatePinner certificatePinner = new CertificatePinner.Builder()
+                .add(hostname, "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+                .build();
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .certificatePinner(certificatePinner)
+                .build();
+    }
+}
+```
+
+## Reverse Proxy
+Após validarmos que o servidor do [Burp Suite](https://portswigger.net/burp/communitydownload) está escutando na porta 8080. Precisamos fazer o redirecionamento do tráfego do Android para o Burp. Para isso, utilizamos o comando `adb reverse`:
+
+```bash
+adb reverse tcp:8080 tcp:8080
+```
+
+Se tudo ocorrer conforme o esperado, o Burp Suite deve começar a capturar o tráfego de rede do aplicativo.
+
+\<imagem-de-falha-no-certificado>
+
+Só que não é tão simples assim. O SSL Pinning pode dificultar a interceptação do tráfego, já que o aplicativo não confia no certificado emitido pelo Burp Suite. Para contornar essa situação, é necessário "bypassar" o SSL Pinning.
+
+## Bypass OkHTTPv3
+Para "bypassar" o SSL Pinning, podemos utilizar ferramentas como o [Frida](/starting/frida) para interceptar as chamadas de verificação de certificado e retornar um valor arbitrário. 
+
+```js showLineNumbers {7-10}
+Java.perform(() => {
+    var CertificatePinner = Java.use("okhttp3.CertificatePinner");
+
+    CertificatePinner.check$okhttp.overload(
+      "java.lang.String",
+      "kotlin.jvm.functions.Function0"
+    ).implementation = function (pattern, certificate) {
+      console.log("[+] SSL Bypass on OkHTTPv3: " + pattern);
+      return;
+    };
+});
+```

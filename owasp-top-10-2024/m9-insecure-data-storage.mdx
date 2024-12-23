@@ -1,0 +1,54 @@
+export const metadata = {
+  title: 'OWASP Top 10 2024: Armazenamento Inseguro de Dados'
+}
+
+# Armazenamento Inseguro de Dados
+O armazenamento de dados é um recurso essencial do sistema operacional Android, permitindo a persistência de informações importantes como imagens, arquivos e dados. Ele também possibilita a criação de sessões sem a necessidade de autenticação a cada abertura do aplicativo. No entanto, é importante destacar que o armazenamento inadequado de informações sensíveis pode expor o usuário a possíveis ataques.
+
+Nessa seção vamos conhecer os principais métodos de armazenamento, suas funcionalidades e vulnerabilidades relacionadas ao armazenamento de dados de forma insegura. Antes de tudo, os principais métodos de armazenamento de dados são:
+
+- Shared Preferences
+- Banco de Dados (SQLite, Firebase e etc)
+- Armazenamento Interno
+- Armazenamento Externo
+
+## Shared Preferences
+O `SharedPreferences` é uma forma de armazenamento de dados chave-valor, onde os dados são armazenados em um arquivo XML. Ele é utilizado para armazenar pequenas quantidades de informações, como configurações do aplicativo, preferências do usuário e outras informações simples.
+
+```java
+SharedPreferences sharedPref = getSharedPreferences("key");
+SharedPreferences.Editor editor = sharedPref.edit();
+editor.putString("username", "administrator");
+editor.putString("password", "P@ss123");
+editor.commit();
+```
+
+Nosso XML de `SharedPreferences` ficaria assim:
+
+```xml
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <string name="username">administrator</string>
+    <string name="password">P@ss123</string>
+</map>
+```
+
+> **Observação**: Por padrão o arquivo XML de `SharedPreferences` é armazenado no diretório `/data/data/com.example.app123/shared_prefs`.
+
+## SQLite Database
+O SQLite é um banco de dados relacional embutido no Android, que permite a criação e gerenciamento de bancos de dados locais. Ele é amplamente utilizado para armazenar informações estruturadas, como dados de usuário, configurações do aplicativo e outras informações complexas.
+
+```java
+SQLiteDatabase supersecure = openOrCreateDatabase("supersecure",MODE_PRIVATE, null);
+supersecure.execSQL("CREATE TABLE IF NOT EXISTS Accounts(Username VARCHAR,Password VARCHAR);");
+supersecure.execSQL("INSERT INTO Accounts VALUES('admin','P@ss123');");
+supersecure.close();
+```
+
+Vamos ir até o local onde o banco de dados é armazenado:
+
+```bash
+adb shell
+cd /data/data/com.example.app123/databases
+ls
+```

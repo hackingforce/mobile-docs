@@ -1,0 +1,26 @@
+export const metadata = {
+  title: 'Fundamentos: Permissões do Android'
+}
+
+## Permissões do Android
+O sistema de permissão do Android é uma das maiores preocupações de segurança desde sempre, já que essas permissões são solicitadas no momento da instalação. Uma vez instalado, o aplicativo poderá acessar todas as coisas concedidas sem que o usuário saiba exatamente o que o aplicativo faz com a permissão.
+
+A partir do Android 6.0 Marshmallow, o aplicativo não receberá nenhuma permissão no momento da instalação. Em vez disso, o aplicativo precisa pedir permissão ao usuário um por um no tempo de execução.
+
+
+## Permissões Perigosas
+A documentação do Android define [permissões perigosas](https://developer.android.com/guide/topics/permissions/overview?hl=pt-br#permission-groups) como permissões que podem afetar a privacidade do usuário ou a segurança do dispositivo. Essas permissões incluem:
+
+| Permission Group | Permissions |
+| --- | --- |
+| `android.permission-group.CALENDAR` | <ul><li>`android.permission.READ_CALENDAR`</li><li>`android.permission.WRITE_CALENDAR`</li></ul> |
+| `android.permission-group.CAMERA` | <ul><li>`android.permission.CAMERA`</li></ul> |
+| `android.permission-group.CONTACTS` | <ul><li>`android.permission.READ_CONTACTS`</li><li>`android.permission.WRITE_CONTACTS`</li><li>`android.permission.GET_ACCOUNTS`</li></ul> |
+| `android.permission-group.LOCATION` | <ul><li>`android.permission.ACCESS_FINE_LOCATION`</li><li>`android.permission.ACCESS_COARSE_LOCATION`</li></ul> |
+| `android.permission-group.MICROPHONE` | <ul><li>`android.permission.RECORD_AUDIO`</li></ul> |
+| `android.permission-group.PHONE` | <ul><li>`android.permission.READ_PHONE_STATE`</li><li>`android.permission.CALL_PHONE`</li><li>`android.permission.READ_CALL_LOG`</li><li>`android.permission.WRITE_CALL_LOG`</li><li>`android.permission.ADD_VOICEMAIL`</li><li>`android.permission.USE_SIP`</li><li>`android.permission.PROCESS_OUTGOING_CALLS`</li></ul> |
+| `android.permission-group.SENSORS` | <ul><li>`android.permission.BODY_SENSORS`</li></ul> |
+| `android.permission-group.SMS` | <ul><li>`android.permission.SEND_SMS`</li><li>`android.permission.RECEIVE_SMS`</li><li>`android.permission.READ_SMS`</li><li>`android.permission.RECEIVE_WAP_PUSH`</li><li>`android.permission.RECEIVE_MMS`</li></ul> |
+| `android.permission-group.STORAGE` | <ul><li>`android.permission.READ_EXTERNAL_STORAGE`</li><li>`android.permission.WRITE_EXTERNAL_STORAGE`</li></ul> |
+
+Se uma permissão de um Grupo de Permissão for concedida. Outra permissão no mesmo grupo será automaticamente concedida também. Neste caso, uma vez `WRITE_CONTACTS` concedida, o aplicativo também concederá `READ_CONTACTS` e `GET_ACCOUNTS`.

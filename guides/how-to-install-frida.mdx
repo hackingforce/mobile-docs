@@ -1,0 +1,50 @@
+export const metadata = {
+  title: 'Guias: Instalação do Frida'
+}
+
+# Instalação do Frida
+
+## Requisitos
+A instalação do Frida é um processo bem simples e direto. No entanto, antes de começar, é importante garantir que seu sistema atenda a alguns requisitos essenciais. Esses requisitos garantem que a instalação e o funcionamento do Frida ocorram sem problemas.
+
+- [Python](https://python.org/) – versão 3.x é recomendada
+- Windows, macOS ou GNU/Linux
+
+## Instalação
+O Frida possui dois componentes principais: o `frida-server`, que é executado no dispositivo ou emulador, e o client, que é executado no host, injeta e gerencia os scripts no processo alvo. Para instalar o Frida, siga os passos abaixo.
+
+Primeiramente, vamos baixar a CLI do Frida.
+
+```bash
+pip install frida-tools
+```
+
+Em seguida, baixe a última versão do `frida-server` na [página de releases](https://github.com/frida/frida/releases) e descompacte-o.
+
+```bash
+unxz frida-server.xz
+```
+
+Em seguida, copie o arquivo para o dispositivo Android e execute-o.
+
+```bash
+adb root
+adb push frida-server /data/local/tmp
+adb shell "chmod 755 /data/local/tmp/frida-server"
+adb shell "/data/local/tmp/frida-server &"
+```
+
+## Validando a Instalação
+Agora, no seu desktop, é hora de garantir que o básico está funcionando. Execute:
+```bash
+frida-ps -Uai
+```
+
+Se tudo estiver funcionando corretamente, você verá uma lista de processos em execução no dispositivo.
+```txt
+  PID NAME
+ 1590 com.facebook.katana
+13194 com.facebook.katana:providers
+12326 com.facebook.orca
+13282 com.twitter.android
+```

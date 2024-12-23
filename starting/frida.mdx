@@ -1,0 +1,116 @@
+export const metadata = {
+  title: 'Iniciando: Frida'
+}
+
+# Frida
+O Frida é uma ferramenta de instrumentação dinâmica que permite a injeção de scripts em processos em tempo de execução. Ele possibilita o monitoramento e a modificação do comportamento de aplicações sem a necessidade de acesso ao código-fonte ou recompilação.
+
+Se você ainda não tem o Frida no seu ambiente de teste, considere consultar o [Guia: Instalação do Frida](/guides/how-to-install-frida) e [Guia: Intellisense no Frida](/guides/intellisense-frida).
+
+## Escrevendo um Hello World
+Vamos escrever um script simples para exibir uma mensagem no console.
+
+```javascript showLineNumbers {1}
+Java.perform(function() {
+  console.log('Hello, World!');
+});
+```
+
+> **Observação:** [`Java.perform(fn)`](https://frida.re/docs/javascript-api/#java:~:text=of%20the%20VM.-,Java.perform(fn),-%3A%20ensure%20that%20the) garante que a thread que executa o código do Frida esteja conectada à JVM (Java Virtual Machine) e chama a função de callback `fn`.
+
+Salve o script em um arquivo chamado `hello.js` e execute-o com o comando abaixo. Se tudo estiver correto, você verá a mensagem `Hello, World!` no console.
+
+```bash
+frida -U -f com.example.app123 -l hello.js --pause
+```
+
+`--pause` é um argumento opcional que permite que o script seja pausado antes de ser executado. Isso é útil para realizar análise estática antes da execução dinâmica e preparar o ambiente de análise sem que o aplicativo execute completamente. 
+
+## Interceptando Funções (Hooking)
+O Frida permite a interceptação de funções em tempo de execução. Vamos criar um script para interceptar o método `decrypt` da classe `java.utils.Crypto`.
+
+```javascript showLineNumbers {2}
+Java.perform(function() {
+  const Crypto = Java.use('java.utils.Crypto');
+
+  Crypto.decrypt.implementation = function() {
+    var result = this.decrypt();
+    console.log(result);
+
+    return result;
+  };
+});
+```
+
+> **Observação:** [`Java.use(className)`](https://frida.re/docs/javascript-api/#java:~:text=of%20the%20VM.-,Java.perform(fn),-%3A%20ensure%20that%20the) retorna uma interface em JavaScript que fornece acesso a uma classe especifíca. Permitindo criar novas instâncias, acessar, chamar métodos e manipular propriedades.
+
+## Overload
+Quando falamos de `overload`, estamos nos referindo a sobrecarga de métodos. Em linguagens como Java, um método pode ter várias versões com o mesmo nome, mas com diferentes argumentos. Então usamos o `overload` para especificar qual método queremos interceptar.
+
+Suponha que a classe `MyClass` tenha dois métodos chamados `doSomething`:
+
+```java showLineNumbers
+doSomething(int arg)
+doSomething(String arg, boolean flag)
+```
+
+```javascript showLineNumbers {4-7}
+Java.perform(function () {
+    var MyClass = Java.use('com.example.app123.MyClass');
+
+    MyClass.doSomething.overload(
+      'java.lang.String', 
+      'boolean'
+    ).implementation = function(arg1, arg2) {
+        console.log(arg1, arg2);
+        return this.doSomething(arg1, arg2);
+    };
+});
+```
+
+
+Argumentos podem ser de tipos primitivos ou classes Java, e a identificação correta desses tipos pode ser desafiadora devido à estrutura do código smali gerado. Além disso, métodos que utilizam `varargs` ou trabalham com arrays podem ser especialmente complexos, pois o smali utiliza uma sintaxe específica para esses casos, como `[Ljava/lang/String;` para um array de strings.
+
+Caso o `overload` especificado esteja incorreto, o Frida exibirá mensagens de erro que ajudam a identificar a assinatura correta do método ou construtor interceptado.
+
+```text
+Error: onCreate(): specified argument types do not match any of:
+  .overload('android.os.Bundle')
+```
+
+## Métodos Construtores
+Em Java, métodos construtores são usados para inicializar objetos de uma classe. Eles possuem o mesmo nome da classe e podem aceitar parâmetros para configurar o estado inicial do objeto.
+
+```java showLineNumbers
+public class MyClass {
+    public MyClass(String arg1, int arg2) {
+        // Construtor
+    }
+}
+```
+
+No Frida, é possível usar o método `$new` para instanciar um objeto de uma classe Java e passar os parâmetros necessários para o construtor. 
+
+```javascript showLineNumbers {3}
+Java.perform(function() {
+  var MyClass = Java.use('com.example.app123.MyClass');
+  var instance = MyClass.$new('Hello', 123);
+});
+```
+
+
+Além disso, você pode interceptar o construtor utilizando o `$init` para monitorar os argumentos ou alterar o comportamento durante a inicialização.
+
+```javascript showLineNumbers {4}
+Java.perform(function() {
+  var MyClass = Java.use('com.example.app123.MyClass');
+
+  MyClass.$init.overload(
+    'java.lang.String', 
+    'int'
+  ).implementation = function(arg1, arg2) {
+    console.log(arg1, arg2);
+    return this.$init(arg1, arg2);
+  };
+});
+```

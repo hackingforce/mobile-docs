@@ -1,0 +1,9 @@
+export const metadata = {
+  title: 'Vulnerabilidades: Insecure Broadcast Receiver'
+}
+
+# Insecure Broadcast Receiver
+A vulnerabilidade geralmente se refere a casos em que o broadcast receiver é exportado acidentalmente, seja definindo `android:exported="true"` no [`AndroidManifest.xml`](/foundations/android-manifest) ou criando um broadcast receiver de forma programática, o que torna o receiver público por padrão. Se o receptor não tiver filtros de _intent_, o valor padrão será `false`. No entanto, se o receptor tiver pelo menos um filtro de _intent_, o valor padrão de `android:exported` será `true`.
+
+Os broadcast receivers exportados intencionalmente sem o controle de acesso adequado podem ser abusados se o desenvolvedor não pretendia que eles fossem chamados por todos os apps.
+

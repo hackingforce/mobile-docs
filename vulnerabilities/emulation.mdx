@@ -1,0 +1,40 @@
+export const metadata = {
+  title: 'Vulnerabilidades: Detecção de Emulação'
+}
+
+# Detecção de Emulação
+
+A detecção de emulação é um conjunto de técnicas utilizadas para identificar se um aplicativo está sendo executado em um dispositivo Android real ou em um ambiente emulado, como [Android Studio](https://developer.android.com/studio?hl=pt-br), [Genymotion](https://www.genymotion.com/) e outros softwares de emulação. 
+
+Emular consiste em utilizar um software para criar um ambiente virtual que simula as características de hardware e sistema operacional de um dispositivo físico.
+
+Essa proteção específica é muito útil para diversas situações, como em aplicativos de jogos para identificar trapaças ou em aplicativos bancários para prevenir fraudes.
+
+## Formas de detectar um dispositivo emulado
+
+Existem diversas formas de indentificar se um aplicativo está sendo executado em um ambiente emulado, uma dessas formas inclui:
+
+- **Verificação de arquivos e diretórios específicos:** Alguns emuladores possuem arquivos ou estruturas características que podem ser detectadas.
+- **Análise das propriedades do sistema:** Verificar parâmetros como fabricante, modelo e versão do sistema operacional.
+- **Identificação do ID de hardware:** Emuladores frequentemente utilizam IDs genéricos ou padrão.
+- **Detecção de comportamentos incomuns:** Alguns comportamentos ou configurações específicas, como aceleração de processos, podem indicar um ambiente emulado.
+
+## Limitações e desafios
+
+Embora útil, a detecção de emulação não é infalível. Com o avanço tecnológico, emuladores estão se tornando cada vez mais sofisticados e difíceis de detectar, especialmente com o surgimento de computadores baseados em ARM, como os Mac M1, M2 e M3. Esse cenário tornou o processo de identificação ainda mais desafiador.
+
+Uma boa prática para dificultar a emulação é evitar compilar o aplicativo para a arquitetura **x86_64**, já que dispositivos Android modernos não utilizam mais essa configuração.
+
+Apesar das limitações, a detecção de emulação continua sendo uma ferramenta importante para ser adicionada no aplicativo, uma vez que ela cria mais uma camada de segurança e dificulta o processo de exploração.
+
+## Análise Estática
+
+
+
+
+## Bypass
+
+## Referências
+
+- [Comparative study of techniques for detecting emulators on
+Android devices](https://www.cin.ufpe.br/~tg/2022-1/tg_CC/tg_lccao.pdf)

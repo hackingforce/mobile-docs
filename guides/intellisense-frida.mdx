@@ -1,0 +1,31 @@
+import { IntelliSenseDemo } from '@/components/ui/code-window'
+
+export const metadata = {
+  title: 'Guia: Intellisense no Frida'
+}
+
+# Intellisense no Frida
+O IntelliSense é uma tecnologia que fornece sugestões automáticas e durante a escrita de código, oferecendo autocompletar, informações sobre métodos e classes, e detecção de erros em tempo real. Ele é amplamente usado em IDEs e editores de código, como o [Visual Studio Code](https://aka.ms/vscode), para melhorar a produtividade dos desenvolvedores.
+
+No contexto do Frida, o IntelliSense ajuda a descobrir APIs com sugestões contextuais enquanto você digita, por exemplo, funções e métodos, como `Java.use`, `Java.perform`, `Interceptor`, entre outros. Facilitando a escrita de scripts. Neste guia, vamos configurar o IntelliSense para o Frida.
+
+<IntelliSenseDemo />
+
+## Configurando o IntelliSense
+Para configurar o IntelliSense no Frida, você precisa de um editor de código que suporte a extensão [TypeScript](https://www.typescriptlang.org/), como o Visual Studio Code. O TypeScript é um superconjunto de JavaScript que adiciona tipagem estática opcional ao código JavaScript.
+
+## Iniciando o Projeto
+Agora vamos inicializar um projeto Node.js para instalar pacotes. No entanto, utilizaremos o `npm` (**N**ode **P**ackage **M**anager), que é a ferramenta padrão para gerenciar dependências e bibliotecas em projetos Node.js.
+
+```bash
+npm init -y
+```
+
+## Tipagem Estática
+O `@types/frida-gum` é um pacote TypeScript que fornece definições de tipos para a API do [Frida Gum](https://frida.re/docs/gum/). Ele é usado para habilitar o IntelliSense no Frida.
+
+Para instalar o pacote `@types/frida-gum`, execute o comando abaixo no terminal.
+
+```bash
+npm install @types/frida-gum
+```
