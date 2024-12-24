@@ -11,3 +11,30 @@ Além do Android Studio, é fundamental instalar ferramentas complementares que 
 - **JADX & JD-GUI**: Descompiladores de arquivos .dex e .jar, utilizados para visualizar o código-fonte de forma mais amigável.
 
 Cada uma dessas ferramentas tem um papel importante no processo de engenharia reversa, permitindo a análise de como o aplicativo funciona, quais dependências ele utiliza e como os dados são manipulados.
+
+### JADX
+Para utilizarmos o jadx teremos duas opções, utilizado via CLI ou por interface gráfica.
+
+Command line:
+```bash
+jadx base.apk -d app_source
+```
+Utilizando o jadx na linha de comando, especificaremos o apk alvo e a opção `-d` realizará a decompilação para a pasta desejava, nesse caso: app_source
+
+Interface gráfica:
+```bash
+jadx-gui base.apk
+```
+Utilizando via interface gráfica basta especificaremos o apk alvo e o jadx abrirá a interface gráfica com o apk decompilado.
+
+### JD-GUI
+A ferramenta JD-GUI utiliza uma interface gráfica para apresentar o código fonte de um arquivo `.jar`.
+
+O primeiro passo é transformarmos o `.apk` em `.jar`. Para isso, utilizaremos a ferramenta `dex2jar`.
+
+```bash
+dex2jar base.apk -o base.jar
+java -jar jd-gui.jar base.jar
+```
+
+Após a transformarmos o arquivo para .jar, utilizaremos o jd-gui especificando o arquivo desejado.
