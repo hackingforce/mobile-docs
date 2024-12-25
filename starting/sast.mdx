@@ -12,25 +12,26 @@ Além do Android Studio, é fundamental instalar ferramentas complementares que 
 
 Cada uma dessas ferramentas tem um papel importante no processo de engenharia reversa, permitindo a análise de como o aplicativo funciona, quais dependências ele utiliza e como os dados são manipulados.
 
-### JADX
-O JADX pode ser utilizado de duas formas: via CLI ou por meio de uma interface gráfica.
+## JADX (Dex to Java Decompiler)
+JADX é utilizado para decompilar arquivos `.apk`, `.dex` e `.jar` em código Java legível. Permitindo a visualização do código fonte de uma forma mais clara, podendo ser utilizado atráves da linha de comando ou interface gráfica. Adequado para analise de arquivos APKs e DEX.
 
-CLI:
+Para utilizar o JADX na linha de comando, execute:
 ```bash
-jadx base.apk -d app_source
+jadx base.apk -d out
 ```
-Para utilizar o JADX na linha de comando especifique o apk e a opção `-d` para decompilar e direcionar para uma pasta, neste caso: app_source.
+`-d` Especifica o diretório de saída.
 
-Interface gráfica:
+Para utilizar o JADX com interface gráfica, execute: 
 ```bash
+jadx-gui
+# ou
 jadx-gui base.apk
 ```
-Para utilizar o JADX via interface gráfica basta especificar o apk alvo.
 
-### JD-GUI
-A ferramenta JD-GUI utiliza uma interface gráfica para apresentar o código fonte de um arquivo `.jar`.
+## JD-GUI (Java Decompiler GUI)
+JD-GUI é utilizado para decompilar arquivos `.class` e `.jar` em código Java legível. Adequado para analisar bibliotecas Java ou classes individuais.
 
-O primeiro passo é transformar o `.apk` em `.jar`. Para isso, utilize a ferramenta `dex2jar`.
+O primeiro passo é transformar o arquivo do tipo `.apk` em `.jar`. Para isso, utilize a ferramenta `dex2jar`.
 
 ```bash
 dex2jar base.apk -o base.jar
@@ -38,3 +39,5 @@ java -jar jd-gui.jar base.jar
 ```
 
 Após transformar o arquivo para .jar utilize o `jd-gui`.
+
+Embora as duas ferramentas tenham funcionalidades semelhantes, cada uma é mais adequada para o tipo de arquivo devido a sua eficiência de decompilação. O JADX é recomendado para arquivos APKs e DEX e o JD-GUI é recomendado para arquivos JAR.
