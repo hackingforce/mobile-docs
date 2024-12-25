@@ -7,6 +7,15 @@ O Frida é uma ferramenta de instrumentação dinâmica que permite a injeção 
 
 Se você ainda não tem o Frida no seu ambiente de teste, considere consultar o [Guia: Instalação do Frida](/guides/how-to-install-frida) e [Guia: Intellisense no Frida](/guides/intellisense-frida).
 
+## Arquitetura
+O Frida é composto por duas partes principais: o `frida-server` e o `frida-client`. O `frida-server` é um daemon executado no dispositivo e responsável por gerenciar a comunicação com o `frida-client`, que funciona como a interface usada para interagir com o servidor. Essa interação permite a instrumentação dinâmica de aplicativos em tempo de execução.
+
+![Arquitetura do Frida](/img/starting/frida/frida-arch.png)
+
+O `frida-client` envia scripts em JavaScript para o `frida-server`. Esses scripts são encaminhados ao motor V8, já em execução no contexto do processo do aplicativo. O V8 processa os scripts, permitindo que métodos sejam interceptados e comportamentos sejam alterados.
+
+> **V8 JavaScript Engine:** É o interpretador JavaScript, também conhecido como máquina virtual JavaScript. Ele é responsável por compilar e executar código JavaScript diretamente no hardware do dispositivo, transformando-o em código de máquina nativo para maior eficiência.
+
 ## Escrevendo um Hello World
 Vamos escrever um script simples para exibir uma mensagem no console.
 

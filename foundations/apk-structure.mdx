@@ -15,10 +15,10 @@ Diretórios essenciais que compõem um APK
 |            |                                                                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `META-INF` | Essa pasta contém informações de verificação e é gerada durante o processo de assinatura do aplicativo. O que significa que qualquer modificação no APK (mesmo a simples substituição de um ícone) exige que o APK seja re-assinado.                                                                       |
-| `lib`      | Bibliotecas nativas compiladas para diferentes arquiteturas de dispositivos.                                                                           |
+| `lib`      | Contém bibliotecas nativas compiladas para diferentes arquiteturas de processador, como ARM, ARM64, x86 ou x86_64.                                                                           |
 | `res`      | Recursos predefinidos da aplicação, como arquivos XML que definem lista de cores, layout da interface de usuário, fontes, valores, etc.                |
 | `assets`   | Recursos estáticos (Imagens, vídeos, documentos e etc) que o aplicativo pode acessar em tempo de execução.                                             |
-| `kotlin`   | Diretório presente apenas se o aplicativo foi desenvolvido em [Kotlin](https://developer.android.com/kotlin/). Ele contém dados específicos do Kotlin. |
+| `kotlin`   | Diretório presente apenas se o aplicativo foi desenvolvido em [Kotlin](https://developer.android.com/kotlin/). Ele contém a runtime Kotlin e outras bibliotecas necessárias. |
 
 ## Arquivos raiz
 
@@ -26,9 +26,9 @@ Arquivos essenciais que são responsaveis por definir a estrutura do aplicativo,
 
 |                                                        |                                                                                                                               |
 | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `MANIFEST.MF`                                          | Lista de nomes/hashes (geralmente SHA-256 em Base64) para todos os arquivos do APK.                                            |
+| `MANIFEST.MF`                                          | Lista de nomes/hashes (geralmente SHA-256 em Base64) para todos os arquivos do APK, usados para verificar a integridade.                                            |
 | `CERT.SF`                                              | Lista de nomes/hashes das linhas correspondentes no arquivo `MANIFEST.MF`.                                                    |
 | `CERT.RSA`                                             | Chave pública e a assinatura do arquivo `CERT.SF`.                                                                            |
 | [`AndroidManifest.xml`](/foundations/android-manifest) | Informações essenciais sobre o aplicativo: componentes, permissões, requisitos, nome do pacote e o entry point do aplicativo. |
-| `classes.dex`                                          | Todas as classes Java no formato de arquivo dex (Dalvik Executable), para serem executadas pelo Android Runtime.              |
+| `classes.dex`                                          | Contém o bytecode Dalvik/ART gerado pela compilação do código-fonte Java ou Kotlin.              |
 | `resources.arsc`                                       | Recursos pré-compilados. Ele guarda informações que ligam o código (`classes.dex`) aos recursos (`res`).                      |
