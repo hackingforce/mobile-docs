@@ -33,13 +33,10 @@ JD-GUI é utilizado para decompilar arquivos `.class` e `.jar` em código Java l
 
 O primeiro passo é transformar o arquivo do tipo `.apk` em `.jar`. Para isso, utilize a ferramenta `dex2jar` ou `enjarify`.
 
-Para utilizar o dex2jar, execute:
+Para utilizar o dex2jar ou enjarify, execute:
 ```bash
 dex2jar base.apk -o base.jar
-```
-
-Para utilizar o enjarify, execute:
-```bash
+# ou
 enjarify.sh base.apk -o base.jar
 ```
 
