@@ -11,3 +11,38 @@ Além do Android Studio, é fundamental instalar ferramentas complementares que 
 - **JADX & JD-GUI**: Descompiladores de arquivos .dex e .jar, utilizados para visualizar o código-fonte de forma mais amigável.
 
 Cada uma dessas ferramentas tem um papel importante no processo de engenharia reversa, permitindo a análise de como o aplicativo funciona, quais dependências ele utiliza e como os dados são manipulados.
+
+## JADX (Dex to Java Decompiler)
+JADX é utilizado para decompilar arquivos `.apk`, `.dex` e `.jar` em código Java legível. Permitindo a visualização do código fonte de uma forma mais clara, podendo ser utilizado atráves da linha de comando ou interface gráfica. Adequado para analise de arquivos APKs e DEX.
+
+Para utilizar o JADX na linha de comando, execute:
+```bash
+jadx base.apk -d out
+```
+`-d` Especifica o diretório de saída.
+
+Para utilizar o JADX com interface gráfica, execute: 
+```bash
+jadx-gui
+# ou
+jadx-gui base.apk
+```
+
+## JD-GUI (Java Decompiler GUI)
+JD-GUI é utilizado para decompilar arquivos `.class` e `.jar` em código Java legível. Adequado para analisar bibliotecas Java ou classes individuais.
+
+O primeiro passo é transformar o arquivo do tipo `.apk` em `.jar`. Para isso, utilize a ferramenta `dex2jar` ou `enjarify`.
+
+Para utilizar o dex2jar ou enjarify, execute:
+```bash
+dex2jar base.apk -o base.jar
+# ou
+enjarify.sh base.apk -o base.jar
+```
+
+Após transformar o arquivo para `.jar` utilize o `jd-gui`:
+```bash
+java -jar jd-gui.jar base.jar
+```
+
+Embora as duas ferramentas tenham funcionalidades semelhantes, cada uma é mais adequada dependendo do objetivo final. O JADX é recomendado para arquivos APKs, DEX e focado em uma análise mais detalhada do aplicativo, apresentando o mais próximo possível do código original, focando na legibilidade. O JD-GUI é recomendado para visualizar a estrutura do bytecode e entender como foram criadas as classes, auxilando na criação de scripts.
