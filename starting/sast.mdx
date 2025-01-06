@@ -31,13 +31,21 @@ jadx-gui base.apk
 ## JD-GUI (Java Decompiler GUI)
 JD-GUI é utilizado para decompilar arquivos `.class` e `.jar` em código Java legível. Adequado para analisar bibliotecas Java ou classes individuais.
 
-O primeiro passo é transformar o arquivo do tipo `.apk` em `.jar`. Para isso, utilize a ferramenta `dex2jar`.
+O primeiro passo é transformar o arquivo do tipo `.apk` em `.jar`. Para isso, utilize a ferramenta `dex2jar` ou `enjarify`.
 
+Para utilizar o dex2jar, execute:
 ```bash
 dex2jar base.apk -o base.jar
-java -jar jd-gui.jar base.jar
 ```
 
-Após transformar o arquivo para .jar utilize o `jd-gui`.
+Para utilizar o enjarify, execute:
+```bash
+enjarify.sh base.apk -o base.jar
+```
+
+Após transformar o arquivo para `.jar` utilize o `jd-gui`:
+```bash
+java -jar jd-gui.jar base.jar
+```
 
 Embora as duas ferramentas tenham funcionalidades semelhantes, cada uma é mais adequada dependendo do objetivo final. O JADX é recomendado para arquivos APKs, DEX e focado em uma análise mais detalhada do aplicativo, apresentando o mais próximo possível do código original, focando na legibilidade. O JD-GUI é recomendado para visualizar a estrutura do bytecode e entender como foram criadas as classes, auxilando na criação de scripts.
