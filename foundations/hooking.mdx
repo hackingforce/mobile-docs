@@ -1,0 +1,20 @@
+export const metadata = {
+  title: 'Fundamentos: Hooking'
+}
+
+# Processo de Hooking
+Hooking é uma técnica que permite interceptar, modificar ou redirecionar o comportamento de funções e métodos durante a execução de aplicativos ou sistemas operacionais. Ferramentas como [Frida](/starting/frida) e Xposed são amplamente utilizadas para esse fim.
+
+A imagem abaixo ilustra o funcionamento dessa técnica:
+
+![hooking-flow](/img/foundations/hooking/hooking.png)
+
+
+**No fluxo original**, a aplicação chama a função `check()`. O sistema consulta a tabela de símbolos, localiza o endereço original da função e direciona a execução para a área de memória onde está armazenado o código original dessa função.
+
+**No fluxo modificado**, a aplicação ainda chama a função `check()`. O sistema consulta a tabela de símbolos, no entanto, utilizando a técnica de hooking, o endereço na tabela de símbolos é alterado para apontar para uma função manipulada, `not_check()`.
+
+
+Essa função modificada pode ser usada para burlar uma verificação ou executar qualquer outro processo antes de continuar ou alterar a execução original. Dessa forma, a aplicação não percebe que o comportamento foi alterado.
+
+> **Tabela de símbolos** é uma estrutura de dados utilizada em compiladores para o armazenamento de identificadores, tais como funções, constantes, variáveis e tipos de dados. 

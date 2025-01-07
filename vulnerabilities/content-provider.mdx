@@ -1,6 +1,58 @@
 export const metadata = {
-  title: 'Vulnerabilidades: Content Provider'
+  title: 'Vulnerabilidades: Insecure Content Provider'
 }
 
-# Content Provider
-Ainda vamos escrever algo sobre isso :)
+# Insecure Content Provider
+
+Content Providers são componentes do Android responsáveis por gerenciar um repositório central de dados (banco de dados) e disponibilizá-lo para outras partes do sistema ou para aplicativos externos. Eles oferecem uma interface para acessar, compartilhar ou sincronizar dados de forma segura.
+
+Os Content Providers possuem diversas funcionalidades, podendo ser utilizados para integrar dados entre diferentes aplicativos ou enviar informações diretamente para widgets. Além disso, são capazes de personalizar sugestões de pesquisa utilizando o `SearchRecentSuggestionsProvider`. Outra funcionalidade comum é a sincronização de dados entre o aplicativo e um servidor remoto, realizada por meio de adaptadores como o `AbstractThreadedSyncAdapter`. Por fim, eles também são utilizados para carregar dados diretamente na interface do usuário, utilizando ferramentas como o `CursorLoader`.
+
+A principal vulnerabilidade associada aos Content Providers surge quando esses componentes são configurados para expor dados sem as devidas restrições. Isso os torna acessíveis a partes do sistema ou aplicativos externos que não deveriam ter permissão para tal.
+
+## Como acessar dados de um Content Provider
+
+O acesso aos dados de um Content Provider é feito por meio do objeto `ContentResolver`, disponível no `Context` do aplicativo. Ele permite que o aplicativo cliente envie solicitações ao provedor e receba os resultados das operações, utilizando funções básicas de **CRUD** (Criar, Ler, Atualizar, Excluir).
+
+Por exemplo:
+
+```kotlin showLineNumbers
+val cursor = contentResolver.query(
+    uri,           // URI que identifica o provedor e seus dados
+    projection,    // Define as colunas retornadas para cada linha
+    selection,     // Define a condição (WHERE) para a consulta
+    selectionArgs, // Argumentos para a condição
+    sortOrder      // Define a ordem de classificação
+)
+```
+
+## Content URI
+Uma Content URI é uma URI que identifica um provedor e seus respectivos dados. Ela é composta por dois elementos principais:
+
+- **Autoridade**: Representa o nome simbólico do provedor (`user_dictionary`).
+- **Caminho**: Identifica a tabela ou recurso específico dentro do provedor (`words`).
+
+```bash
+content://user_dictionary/words
+```
+
+## Consultando com ADB
+Os dados de um Content Provider podem ser consultados diretamente pelo ADB, utilizando o comando `content query`. 
+
+Exemplo:
+```bash
+adb shell content query --uri "content://user_dictionary/words"
+```
+
+Esse comando retorna os dados armazenados na tabela `words` do Content Provider identificado como `user_dictionary`.
+
+## Tabela de Equivalência: Content Provider e SQL
+Para facilitar o entendimento, a tabela a seguir apresenta uma comparação entre os elementos de um Content Provider e suas equivalências no SQL.
+
+| Elemento no Content Provider | Equivalente no SQL | Descrição |
+| --- | --- | --- |
+| `Content URI` | `FROM table` | Define a tabela no provedor, ex: `content://user_dictionary/words`.|
+| `projection` | `SELECT columns` | Define as colunas retornadas na consulta, ex: `_ID, word, locale`.|
+| `selection` | `WHERE clause` | Define os critérios de filtro, ex: `word = 'HackingForce'`. |
+| `selectionArgs` | Parâmetros para `WHERE` | Define valores dinâmicos para as condições, ex: `{'HackingForce'}`. |
+| `sortOrder` | `ORDER BY clause` | Define a ordenação dos resultados, ex: `word ASC`. |

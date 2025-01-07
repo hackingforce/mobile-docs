@@ -1,0 +1,66 @@
+export const metadata = {
+    title: 'Fundamentos: Smali'
+}
+
+# Introdução ao Smali
+Smali é a linguagem de montagem utilizada para descrever o bytecode Dalvik, que é a representação em baixo nível de aplicações Android. Em outras palavras, o Smali é como o código Java se traduz no nível de máquina, sendo uma ferramenta essencial para quem deseja explorar, modificar ou entender o funcionamento interno de aplicativos Android.
+
+Compreender Smali é essencial no contexto de segurança mobile. Durante o processo de decompilação, é comum que partes do código não sejam traduzidas completamente para Java ou outras linguagens de alto nível. Nesses casos, a análise de Smali torna-se indispensável para interpretar a lógica e as funcionalidades do código, permitindo uma compreensão mais profunda de seu comportamento.
+
+## Estrutura do Código Smali
+Um arquivo Smali é estruturado em classes, métodos e instruções que seguem uma sintaxe própria, como mostra o exemplo abaixo:
+
+```java showLineNumbers
+.class public LHelloWorld;
+.super Ljava/lang/Object;
+
+.method public static main([Ljava/lang/String;)V
+    .registers 2
+    sget-object v0, Ljava/lang/System;->out:Ljava/io/PrintStream;
+    const-string v1, "Hello World!"
+    invoke-virtual {v0, v1}, Ljava/io/PrintStream;->println(Ljava/lang/String;)V
+    return-void
+.end method
+```
+
+> <p className="!mb-2 !mt-2">**`.class`**: Define a classe pública `HelloWorld`.</p>
+> <p className="!mb-2 !mt-0">**`.super`**: Define a classe base da qual a classe `HelloWorld` herda, neste caso `java.lang.Object`.</p>
+> <p className="!mb-2">**`.method`**: Representa um método, neste caso, o método principal `main`.</p>
+
+As instruções como `sget-object`, `const-string`, e `invoke-virtual` são comandos que manipulam registradores e realizam operações no nível de bytecode.
+
+## Java para Smali
+
+É possível converter um código Java em Smali utilizando ferramentas como `javac`, `dx` e `baksmali`. Para ilustrar o processo de conversão, considere o seguinte código Java:
+
+```java showLineNumbers
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+}
+```
+
+Compile o código Java para bytecode:
+```bash
+javac --release 7 HelloWorld.java
+```
+
+Converta o bytecode em um arquivo `.dex`:
+```bash
+dx --dex --output=HelloWorld.dex HelloWorld.class
+```
+
+Descompile o `.dex` em código Smali:
+```bash
+baksmali HelloWorld.dex -o HelloWorld
+```
+
+O resultado será um arquivo `.smali` que representa o comportamento do código Java no nível Dalvik.
+
+## Aplicações do Smali
+O Smali é amplamente utilizado em cenários de segurança mobile, como:
+
+- **Engenharia reversa**: Para entender o funcionamento de aplicativos.
+- **Modificação de comportamento**: Para aplicar patches ou realizar testes de segurança.
+- **Estudo de proteção**: Para implementar ou quebrar proteções, como validações de licenças e mecanismos anti-tampering.

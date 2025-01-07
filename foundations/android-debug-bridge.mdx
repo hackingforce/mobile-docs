@@ -45,3 +45,12 @@ adb reverse tcp:8080 tcp:8080
 ```
 
 `--remove` pode ser usado para remover as portas redirecionadas.
+
+## Interromper o servidor do adb
+Em alguns casos, pode ser necessário encerrar o processo do servidor do adb e reiniciá-lo para resolver o problema. Por exemplo, esse pode ser o caso quando adb não responde a um comando.
+
+Para interromper o servidor do adb, use o comando a baixo. Em seguida, é possível emitir qualquer outro comando do adb para reiniciar o servidor.
+
+```bash
+adb kill-server
+```

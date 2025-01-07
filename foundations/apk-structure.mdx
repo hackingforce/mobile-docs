@@ -3,14 +3,14 @@ export const metadata = {
 };
 
 # Estrutura e Organização de um APK
+Essa página descreve a estrutura de um APK (**A**ndroid **P**ackage **K**it), que é o formato de arquivo usado para distribuir e instalar aplicativos no Android. Apesar de sua extensão específica, o APK é essencialmente um arquivo JAR (**J**ava **Ar**chive) que contém todos os recursos e arquivos necessários para instalar e executar um aplicativo no Android.
 
-Essa página descreve a estrutura de um APK (**A**ndroid **P**ackage **K**it), que é o formato de arquivo usado para distribuir e instalar aplicativos no Android. Apesar do sufixo, o APK é um tipo de JAR (**J**ava **Ar**chive) que contém todos os recursos e arquivos necessários para instalar e executar um aplicativo no Android.
+Como o JAR é baseado no formato ZIP, é possível renomear a extensão de um arquivo APK para .zip, descompactá-lo e explorar a estrutura de diretórios e arquivos que compõem o aplicativo.
 
-Sabendo que JAR é um tipo de ZIP, é possível modificar o sufixo de um arquivo APK para `.zip`, descompactá-lo e ver a estrutura de diretórios e arquivos que compõem o aplicativo.
+![Estrutura de um APK](/img/foundations/apk-structure/file-structure.png)
 
-## Diretórios raiz
-
-Diretórios essenciais que compõem um APK
+## Diretórios
+Diretórios responsáveis por armazenar recursos estáticos do aplicativo e informações relacionadas à assinatura digital.
 
 |            |                                                                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -20,8 +20,7 @@ Diretórios essenciais que compõem um APK
 | `assets`   | Recursos estáticos (Imagens, vídeos, documentos e etc) que o aplicativo pode acessar em tempo de execução.                                             |
 | `kotlin`   | Diretório presente apenas se o aplicativo foi desenvolvido em [Kotlin](https://developer.android.com/kotlin/). Ele contém a runtime Kotlin e outras bibliotecas necessárias. |
 
-## Arquivos raiz
-
+## Arquivos
 Arquivos essenciais que são responsaveis por definir a estrutura do aplicativo, componentes, permissões, recursos e configurações gerais.
 
 |                                                        |                                                                                                                               |

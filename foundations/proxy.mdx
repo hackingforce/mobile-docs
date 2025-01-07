@@ -1,0 +1,29 @@
+export const metadata = {
+  title: 'Fundamentos: Proxy'
+}
+
+# Proxy
+Um proxy atua como intermediário entre um cliente e um servidor, redirecionando conexões e permitindo o controle e a modificação das comunicações. Ele opera como um relay de conexões TCP, onde o cliente se conecta a uma porta do proxy, que então estabelece outra conexão com o servidor externo. Dependendo de sua configuração, o proxy pode operar na camada de transporte ou aplicação, fornecendo maior controle sobre a interação entre cliente e servidor.
+
+![Reverse Proxy](/img/foundations/proxy/reverse-proxy.png)
+
+## Considerações Gerais sobre Proxies
+| Aspecto | Detalhes |
+| ------- | -------- |
+| **Protocolos suportados** | Não se limitam apenas a HTTP/S, podendo incluir POP3, IMAP, FTP, Telnet e outros. | 
+| **Proxy vs Cache** | Embora muitos proxies HTTP implementem caching, proxy e cache são funcionalidades distintas. | 
+| **Proxy vs Firewall** | Proxies frequentemente possuem mecanismos de filtragem similares aos de firewalls, mas suas funções e propósitos são distintos. |  
+
+## Tipos de Proxy
+| Tipo | Características |
+| ------- | -------- |
+| **Proxy Comum (ou Ativo)** | Requer configuração no cliente para especificar o endereço IP e a porta do proxy. Dessa forma o cliente está ciente da existência do proxy. |
+| **Proxy Transparente** | Redireciona conexões automaticamente para um servidor proxy sem a necessidade de configuração no cliente. Com isso o cliente geralmente não percebe que está utilizando um proxy. (No entanto nem todos os protocolos suportam este modo de operação). |
+
+## Web Application Proxies
+Os proxies de aplicações web operam na camada de aplicação (camada 7 do modelo OSI), permitindo que requisições e respostas HTTP sejam filtradas, analisadas e registradas. Esses proxies são indispensáveis para análises detalhadas de tráfego durante testes de segurança. Entre as mais populares estão: [Burp Suite](https://portswigger.net/burp) e [OWASP ZAP](https://owasp.org/www-project-zap/).
+  
+## Utilização em Pentests
+Durante uma avaliação de uma aplicação mobile, um dos pontos mais críticos a serem analisados é a comunicação do aplicativo com a API. Essa comunicação frequentemente envolve o envio de dados confidenciais e sensíveis, além de ser onde a lógica de negócios do cliente é implementada. Por isso, o uso de um proxy é essencial para interceptar, analisar e manipular as requisições de maneira eficaz.
+
+> Para as demonstrações apresentadas nesta documentação, será utilizado o [Burp Community Edition](https://portswigger.net/burp).
