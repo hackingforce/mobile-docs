@@ -1,0 +1,26 @@
+export const metadata = {
+  title: 'Segurança: Sandbox de Aplicativos',
+  description: ''
+}
+
+## Sandbox de Aplicativos
+O sistema operacional Android, é baseado em UNIX. Cria um ambiente controlado e isolado onde cada aplicativo é executado, garantindo que as interações entre aplicativos e com o sistema sejam controladas.
+
+Quando um aplicativo é instalado no Android, o sistema automaticamente atribui a ele um identificador de usuário exclusivo (UID). Esse UID é utilizado para diferenciar o aplicativo dos demais e serve como uma base para a implementação do sandbox. No nível do sistema operacional, o Android utiliza permissões e controles de acesso do Linux para garantir que cada aplicativo funcione em seu próprio espaço isolado, como se fosse um usuário independente.
+
+Na prática, isso significa que, do ponto de vista do sistema operacional, cada aplicativo não pode acessar diretamente os dados ou recursos de outros aplicativos sem autorização explícita. Em resumo, é tratado como se fosse um usuário individual, com permissões e restrições específicas.
+
+```bash
+adb shell
+ps -A # ou top
+```
+
+Você verá uma lista de todos os processos em execução no dispositivo, incluido uma coluna com o usuário associado a cada processo, cada um com seu próprio UID e espaço de memória isolado.
+
+```bash
+su u0_a131
+```
+
+O prefixo `u0_a` é uma abreviação de "user 0 application", indicando que o aplicativo está sendo executado no espaço de usuário `0`. Se o dispositivo tivesse outros perfis como contas de trabalho, contas pessoais ou convidados eles seriam identificados como `u1`, `u2`, etc. 
+
+O número `131` é o UID do aplicativo, que é único para cada aplicativo instalado no dispositivo.

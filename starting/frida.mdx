@@ -5,7 +5,7 @@ export const metadata = {
 # Frida
 O Frida é uma ferramenta de instrumentação dinâmica que permite a injeção de scripts em processos em tempo de execução. Ele possibilita o monitoramento e a modificação do comportamento de aplicações sem a necessidade de acesso ao código-fonte ou recompilação.
 
-Se você ainda não tem o Frida no seu ambiente de teste, considere consultar o [Guia: Instalação do Frida](/guides/how-to-install-frida) e [Guia: Intellisense no Frida](/guides/intellisense-frida).
+Se você ainda não tem o Frida no seu ambiente de teste, consulte os guias: [Instalação do Frida](/guides/how-to-install-frida) e [Intellisense no Frida](/guides/intellisense-frida).
 
 ## Arquitetura
 O Frida é composto por duas partes principais: o `frida-server` e o `frida-client`. O `frida-server` é um daemon executado no dispositivo e responsável por gerenciar a comunicação com o `frida-client`, que funciona como a interface usada para interagir com o servidor. Essa interação permite a instrumentação dinâmica de aplicativos em tempo de execução.
@@ -20,7 +20,7 @@ O `frida-client` envia scripts em JavaScript para o `frida-server`. Esses script
 Vamos escrever um script simples para exibir uma mensagem no console.
 
 ```javascript showLineNumbers {1}
-Java.perform(function() {
+Java.perform(() => {
   console.log('Hello, World!');
 });
 ```
@@ -39,11 +39,11 @@ frida -U -f com.example.app123 -l hello.js --pause
 O Frida permite a interceptação de funções em tempo de execução. Vamos criar um script para interceptar o método `decrypt` da classe `java.utils.Crypto`.
 
 ```javascript showLineNumbers {2}
-Java.perform(function() {
+Java.perform(() => {
   const Crypto = Java.use('java.utils.Crypto');
 
   Crypto.decrypt.implementation = function() {
-    var result = this.decrypt();
+    const result = this.decrypt();
     console.log(result);
 
     return result;
@@ -65,7 +65,7 @@ doSomething(String arg, boolean flag)
 
 ```javascript showLineNumbers {4-7}
 Java.perform(function () {
-    var MyClass = Java.use('com.example.app123.MyClass');
+    const MyClass = Java.use('com.example.app123.MyClass');
 
     MyClass.doSomething.overload(
       'java.lang.String', 
@@ -78,7 +78,7 @@ Java.perform(function () {
 ```
 
 
-Argumentos podem ser de tipos primitivos ou classes Java, e a identificação correta desses tipos pode ser desafiadora devido à estrutura do código smali gerado. Além disso, métodos que utilizam `varargs` ou trabalham com arrays podem ser especialmente complexos, pois o smali utiliza uma sintaxe específica para esses casos, como `[Ljava/lang/String;` para um array de strings.
+Argumentos podem ser de tipos primitivos ou classes Java, e a identificação correta desses tipos pode ser desafiadora devido à estrutura do código smali gerado. Além disso, métodos que utilizam `consargs` ou trabalham com arrays podem ser especialmente complexos, pois o smali utiliza uma sintaxe específica para esses casos, como `[Ljava/lang/String;` para um array de strings.
 
 Caso o `overload` especificado esteja incorreto, o Frida exibirá mensagens de erro que ajudam a identificar a assinatura correta do método ou construtor interceptado.
 
@@ -101,9 +101,9 @@ public class MyClass {
 No Frida, é possível usar o método `$new` para instanciar um objeto de uma classe Java e passar os parâmetros necessários para o construtor. 
 
 ```javascript showLineNumbers {3}
-Java.perform(function() {
-  var MyClass = Java.use('com.example.app123.MyClass');
-  var instance = MyClass.$new('Hello', 123);
+Java.perform(() => {
+  const MyClass = Java.use('com.example.app123.MyClass');
+  const instance = MyClass.$new('Hello', 123);
 });
 ```
 
@@ -111,8 +111,8 @@ Java.perform(function() {
 Além disso, você pode interceptar o construtor utilizando o `$init` para monitorar os argumentos ou alterar o comportamento durante a inicialização.
 
 ```javascript showLineNumbers {4}
-Java.perform(function() {
-  var MyClass = Java.use('com.example.app123.MyClass');
+Java.perform(() => {
+  const MyClass = Java.use('com.example.app123.MyClass');
 
   MyClass.$init.overload(
     'java.lang.String', 
@@ -121,5 +121,22 @@ Java.perform(function() {
     console.log(arg1, arg2);
     return this.$init(arg1, arg2);
   };
+});
+```
+
+## Reflection
+Reflection é um conceito amplamente utilizado em programação, especialmente em linguagens como Java e Kotlin, que permite que um programa inspecione e manipule sua própria estrutura em tempo de execução.
+
+No contexto de ferramentas de instrumentação dinâmica, o reflection é uma técnica poderosa para acessar classes, métodos e campos privados, protegidos ou ocultos.
+
+```javascript showLineNumbers {3}
+Java.perform(() => {
+  const MyClass = Java.use('com.example.app123.MyClass');
+  const instance = MyClass.$new('Hello', 123);
+
+  const field = instance.getClass().getDeclaredField('mField');
+  field.setAccessible(true);
+
+  console.log(field.get(instance));
 });
 ```

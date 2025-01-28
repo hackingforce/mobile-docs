@@ -1,18 +1,48 @@
+import { Square } from 'lucide-react';
+
 export const metadata = {
-  title: 'Vulnerabilidades: FLAG_SECURE'
+    title: 'Vulnerabilidades: FLAG_SECURE'
 }
 
 # FLAG_SECURE
-Nesta seção, iremos apresentar uma abordagem que pode ser utilizadas para burlar a `FLAG_SECURE`. Uma medida de segurança que informa ao Android para não permitir capturas de tela ou exibir a visualização da janela em uma tela não segura (como a transmissão do tela). 
+Quando uma activity do Android é marcada com a [`FLAG_SECURE`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_LAYOUT_IN_SCREEN), o sistema operacional adota medidas adicionais para proteger o conteúdo exibido na tela. Essa flag é amplamente utilizada para proteger informações confidenciais, como senhas, dados bancários, informações de autenticação e outros conteúdos sensíveis.
 
-Isso é útil para aplicativos plicativos de bancos, de autenticação, de comércio eletrônico, ou qualquer outro aplicativo que exija a entrada de informações confidenciais do usuário.
+Ao aplicar a `FLAG_SECURE`, o Android impede que o conteúdo da tela seja capturado por screenshots ou gravado em vídeos. Além disso, essa flag bloqueia a exibição do conteúdo da tela em dispositivos externos, como monitores ou projetores, que não sejam reconhecidos como seguros pelo sistema. 
 
-## Como saber se a FLAG_SECURE está ativada?
-Existem várias formas de validar se a `FLAG_SECURE` está presente no aplicativo. Podemos utilizar o `adb` para capturar a tela do dispositivo. 
+## Exemplo de Implementação
+
+```kotlin showLineNumbers {10-13}
+import android.os.Bundle
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+
+class SecureActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_secure)
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
+    }
+}
+```
+
+## Como identificar FLAG_SECURE?
+
+Uma maneira prática de verificar a presença da `FLAG_SECURE` é enviar o aplicativo para o background (pressionando o botão Visão Geral/Overview <Square fill="#fff" className='inline-block w-4'/>). Caso, ao visualizar a tela na lista de aplicativos recentes, a imagem apareça em branco ou esteja completamente oculta, isso indica que a `FLAG_SECURE` está ativada.  
+
+<img src="/img/vulnerabilities/flag-secure/overview-hidden.png" className='not-prose w-72'/>
+
+Outra abordagem é utilizar o comando `adb` para realizar uma captura de tela diretamente do dispositivo. Se a captura de tela resultar em um arquivo vazio ou inutilizável (como 0 bytes), isso é um forte indicativo de que a `FLAG_SECURE` está sendo aplicada para proteger o conteúdo da tela.
+
 ```bash
 adb shell screencap -p /sdcard/screen.png
 adb pull /sdcard/screen.png
 ```
+
+![](/img/vulnerabilities/flag-secure/0-bytes.png)
 
 ## Bypass
 

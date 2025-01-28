@@ -14,28 +14,34 @@ Uma das estratégias mais eficazes para proteger um aplicativo Android é a impl
 
 Portanto, essas proteções precisam ser constantemente melhoradas e novos obstáculos precisam ser adicionados. O objetivo é aumentar a dificuldade e o custo dos ataques, reduzindo a superfície de ataque e protegendo melhor os dados sensíveis. Além disso, é essencial manter uma abordagem proativa na implementação de medidas de segurança, atualizando regularmente as proteções e acompanhando as melhores práticas da indústria para garantir a segurança contínua da aplicação.
 
-## Obfuscação
-A obfuscação é uma técnica de segurança que consiste em tornar o código-fonte de um aplicativo mais difícil de ser compreendido por humanos. A obfuscação é útil para dificultar a engenharia reversa do aplicativo e entender seu funcionamento interno.
+## Ofuscação
+A ofuscação é uma técnica de segurança que consiste em tornar o código-fonte de um aplicativo mais difícil de ser compreendido por humanos. Essa prática é essencial para dificultar a engenharia reversa, protegendo o funcionamento interno do aplicativo e ajudando a preservar segredos como chaves criptográficas, regras de negócios sensíveis ou implementações proprietárias.
+
+O [ProGuard](https://github.com/Guardsquare/proguard), incluído no Android SDK, é uma ferramenta gratuita que realiza a ofuscação básica ao renomear classes, métodos e variáveis, além de remover código desnecessário. No entanto, para proteger ainda mais o aplicativo, é recomendável utilizar ferramentas de ofuscação mais avançadas, como o [DexGuard](https://www.guardsquare.com/dexguard), que oferece recursos adicionais, como ofuscação personalizada, proteção contra ataques de runtime e mecanismos de segurança reforçados para dificultar ainda mais a engenharia reversa.
 
 ## Dispositivos Emulados
 Detectar emulação no Android é uma etapa crucial em uma estratégia de proteção em camadas, já que emuladores são frequentemente usados para executar e analisar aplicativos em ambientes controlados. Nesses ambientes, é possível manipular o comportamento do aplicativo, observar sua execução, realizar engenharia reversa no código, anexar depuradores ou adulterar funcionalidades. Implementar a detecção de emuladores adiciona uma camada essencial de segurança, reforçando uma abordagem abrangente para mitigar riscos.
 
-## Android Root
+## Root
 A detecção de root consiste em identificar se um dispositivo Android passou pelo processo de rooting, permitindo que os usuários executem comandos com privilégios elevados além dos normalmente disponíveis. Essa prática é uma camada essencial de proteção em aplicativos móveis, pois ajuda a garantir a integridade do sistema e dificulta o uso de ferramentas e técnicas avançadas para explorar vulnerabilidades ou manipular o ambiente do dispositivo.
 
-## Android Hooking
+## Hooking
 Detectar hooking é essencial para proteger aplicativos contra alterações indesejadas no comportamento. Essa detecção permite que os aplicativos identifiquem tentativas de interceptação e manipulação maliciosa, reforçando uma abordagem de segurança em camadas.
 
 ## TLS/SSL Pinning
 TLS/SSL Pinning é uma prática crucial para fortalecer a segurança de aplicativos móveis que se comunicam com servidores. Ela impede que dados sensíveis sejam interceptados durante a transmissão, protegendo contra ataques de interceptação, como os ataques man-in-the-middle (MITM).
 
-## Uso de Bibliotecas Nativas
-O uso de bibliotecas nativas (escritas em C ou C++ e acessadas via JNI - **J**ava **N**ative **I**nterface) é uma abordagem eficaz para reforçar a segurança de aplicativos Android. Essas bibliotecas podem ser utilizadas para implementar funções de detecção, como emulação, root e ferramentas de hooking. Por serem executadas fora do ambiente de execução da JVM, as bibliotecas nativas tornam mais difícil para os invasores inspecionarem e manipularem diretamente as funções.
+## Bibliotecas Nativas
+O uso de bibliotecas nativas (escritas em **C** ou **C++** e acessadas via JNI - **J**ava **N**ative **I**nterface) é uma abordagem eficaz para reforçar a segurança de aplicativos Android. Essas bibliotecas podem ser utilizadas para implementar funções de detecção, como emulação, root e ferramentas de hooking. Por serem executadas fora do ambiente de execução da JVM, as bibliotecas nativas tornam mais difícil para inspecionarem e manipularem diretamente as funções.
 
 Uma vez que se o carregamento da biblioteca for alterado ou ignorado, a lógica do aplicativo pode ser projetada para quebrar sua funcionalidade, impedindo sua execução.
 
-## Evitar Compilação em x86_64
-Outra prática recomendada é evitar compilar o aplicativo para a arquitetura x86_64. Atualmente, dispositivos Android não são mais fabricados nessa arquitetura, o que é um forte indicativo de execução em um ambiente emulado.
+## Não Compilar em x86_64
+Evitar a compilação de aplicativos para a arquitetura **x86_64** é uma prática recomendada para mitigar a emulação e fortalecer a segurança mobile. Atualmente, dispositivos Android não são mais fabricados nessa arquitetura, e sua presença é um indicativo claro de execução em um ambiente emulado. Restringir a compatibilidade para arquiteturas amplamente utilizadas em dispositivos reais, como **armeabi-v7a** e **arm64-v8a**, dificulta a análise em emuladores e limitar as possibilidades de engenharia reversa ou exploração de vulnerabilidades.
+
+Apesar de a arquitetura **x86_64** ser comum em emuladores, a Google introduziu, com o Android 11, imagens de sistemas capazes de executar binários **ARM**. Isso é possível graças a uma camada de tradução que converte instruções **ARM** para **x86**, permitindo testes em emuladores. No entanto, mesmo com essas melhorias, o uso da arquitetura **x86_64** ainda é um indicador predominante de execução em ambientes emulados.
+
+Além disso, desde agosto de 2019, aplicativos publicados na [Google Play Store](https://play.google.com/store/) devem obrigatoriamente oferecer [suporte a arquiteturas de 64 bits](https://developer.android.com/google/play/requirements/64-bit?hl=pt-br), como **arm64-v8a**, garantindo compatibilidade com dispositivos modernos. Portanto, evitar o suporte a **x86_64** e focar em arquiteturas **ARM** é uma abordagem eficaz para melhorar a segurança e dificultar o uso de emuladores.
 
 ## Referências
 

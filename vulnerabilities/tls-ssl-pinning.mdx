@@ -56,7 +56,7 @@ Para "bypassar" o SSL Pinning, podemos utilizar ferramentas como o [Frida](/star
 
 ```js showLineNumbers {7-10}
 Java.perform(() => {
-    var CertificatePinner = Java.use("okhttp3.CertificatePinner");
+    const CertificatePinner = Java.use("okhttp3.CertificatePinner");
 
     CertificatePinner.check$okhttp.overload(
       "java.lang.String",

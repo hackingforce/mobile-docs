@@ -1,5 +1,21 @@
 export const metadata = {
-  title: 'Vulnerabilidades: Detecção de Frida'
+  title: 'Vulnerabilidades: Detecção de Hooking'
 }
+
+# Vulnerabilidades: Detecção de Hooking
+
+Como já mencionado nas seções de [Hooking](/starting/hooking) e [Frida](/starting/frida), o processo de hooking é essencial para a análise e manipulação de aplicações Android, sendo uma das técnicas mais importantes para realizar a avaliação de segurança mobile. Dentre as ferramentas disponíveis, o Frida é uma das mais utilizadas para esse propósito.
+
+Devido à sua relevância e potencial impacto, é comum que os desenvolvedores implementem medidas de segurança para detectar se o aplicativo está sendo executado em paralelo com o Frida ou está sendo manipulado por ele. No entanto, o Frida foi projetado para operar de forma furtiva (stealth), o que torna desafiadora a criação de camadas de segurança 100% eficazes contra sua detecção. 
+
+## Detecção de Frida
+
+As formas mais comuns de detecção de Frida são: 
+
+1. **Verificação de processos**: O Frida cria um processo chamado `frida-server` que é utilizado para se comunicar com o dispositivo. Portanto, uma forma de detectar a presença do Frida é verificar se esse processo está em execução no dispositivo.
+
+2. **Verificação de bibliotecas**: O Frida utiliza bibliotecas específicas para realizar a injeção de código nos aplicativos. Portanto, outra forma de detectar a presença do Frida é verificar se essas bibliotecas estão presentes no aplicativo.
+
+5. **Verificação de arquivos**: O Frida cria arquivos específicos para realizar a injeção de código nos aplicativos. Portanto, outra forma de detectar a presença do Frida é verificar se esses arquivos estão presentes no aplicativo.
 
 # src/docs/vulnerabilities/frida-detection.mdx
