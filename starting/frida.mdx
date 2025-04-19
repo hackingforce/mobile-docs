@@ -19,7 +19,7 @@ O `frida-client` envia scripts em JavaScript para o `frida-server`. Esses script
 ## Escrevendo um Hello World
 Vamos escrever um script simples para exibir uma mensagem no console.
 
-```javascript showLineNumbers {1}
+```javascript showLineNumbers {1} filename="hello.js"
 Java.perform(() => {
   console.log('Hello, World!');
 });
@@ -27,7 +27,7 @@ Java.perform(() => {
 
 > **Observação:** [`Java.perform(fn)`](https://frida.re/docs/javascript-api/#java:~:text=of%20the%20VM.-,Java.perform(fn),-%3A%20ensure%20that%20the) garante que a thread que executa o código do Frida esteja conectada à JVM (Java Virtual Machine) e chama a função de callback `fn`.
 
-Salve o script em um arquivo chamado `hello.js` e execute-o com o comando abaixo. Se tudo estiver correto, você verá a mensagem `Hello, World!` no console.
+Salve o script em um arquivo e execute-o com o comando abaixo. Se tudo estiver correto, você verá a mensagem `Hello, World!` no console.
 
 ```bash
 frida -U -f com.example.app123 -l hello.js --pause
@@ -38,7 +38,7 @@ frida -U -f com.example.app123 -l hello.js --pause
 ## Interceptando Funções (Hooking)
 O Frida permite a interceptação de funções em tempo de execução. Vamos criar um script para interceptar o método `decrypt` da classe `java.utils.Crypto`.
 
-```javascript showLineNumbers {2}
+```javascript showLineNumbers {2} filename="decrypt.js"
 Java.perform(() => {
   const Crypto = Java.use('java.utils.Crypto');
 
@@ -63,8 +63,8 @@ doSomething(int arg)
 doSomething(String arg, boolean flag)
 ```
 
-```javascript showLineNumbers {4-7}
-Java.perform(function () {
+```javascript showLineNumbers {4-7} filename="overload.js"
+Java.perform(() => {
     const MyClass = Java.use('com.example.app123.MyClass');
 
     MyClass.doSomething.overload(
@@ -100,7 +100,7 @@ public class MyClass {
 
 No Frida, é possível usar o método `$new` para instanciar um objeto de uma classe Java e passar os parâmetros necessários para o construtor. 
 
-```javascript showLineNumbers {3}
+```javascript showLineNumbers {3} filename="new.js"
 Java.perform(() => {
   const MyClass = Java.use('com.example.app123.MyClass');
   const instance = MyClass.$new('Hello', 123);
@@ -110,7 +110,7 @@ Java.perform(() => {
 
 Além disso, você pode interceptar o construtor utilizando o `$init` para monitorar os argumentos ou alterar o comportamento durante a inicialização.
 
-```javascript showLineNumbers {4}
+```javascript showLineNumbers {4} filename="init.js"
 Java.perform(() => {
   const MyClass = Java.use('com.example.app123.MyClass');
 
@@ -129,7 +129,7 @@ Reflection é um conceito amplamente utilizado em programação, especialmente e
 
 No contexto de ferramentas de instrumentação dinâmica, o reflection é uma técnica poderosa para acessar classes, métodos e campos privados, protegidos ou ocultos.
 
-```javascript showLineNumbers {3}
+```javascript showLineNumbers {6} filename="reflection.js"
 Java.perform(() => {
   const MyClass = Java.use('com.example.app123.MyClass');
   const instance = MyClass.$new('Hello', 123);

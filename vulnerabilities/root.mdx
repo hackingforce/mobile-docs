@@ -4,7 +4,7 @@ export const metadata = {
     title: 'Vulnerabilidades: Detecção de Root'
 }
 
-# Detecção de Root
+# Detecção de root
 Sabemos que o sistema operacional Android é baseado em UNIX onde ocorre uma segregação de usuários, quando você compra um dispositivo físico, você é um usuário de baixo privilegio, ou seja, tem ações limitadas. O que garante a integridade do ambiente.
 
 Quando passamos ser um super usuário, podemos fazer o que quisermos. Listar processos, diretórios, abrir portas, usar frameworks de instrumentação como frida, Xposed e etc.
@@ -29,7 +29,7 @@ if (rootBeer.isRooted()) {
 }
 ```
 
-## Bypass
+## Burlando a verificação de root
 Depois de analisar o aplicativo e identificar a verificação de root, podemos usar o frida para interceptar a chamada e retornar um valor falso.
 
 ```js showLineNumbers {4}
