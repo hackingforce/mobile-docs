@@ -5,12 +5,14 @@ export const metadata = {
 # Android Debug Bridge
 O Android Debug Bridge (ADB) é uma ferramenta de linha de comando que permite a comunicação entre um dispositivo Android e um computador. O ADB é parte do Android SDK e é utilizado para depurar aplicativos, instalar APKs, transferir arquivos, e muito mais.
 
-> `adb` está incluído no pacote Android SDK Platform Tools.
+> [!INFO]
+> adb está incluído no pacote Android SDK Platform Tools.
+
 
 ## Dispositivos Ativos
 Para listar os dispositivos ativos conectados ao computador, execute o seguinte comando:
 
-```bash
+```bash filename="Terminal"
 adb devices
 ```
 
@@ -19,13 +21,13 @@ Para transferir arquivos entre o computador e o dispositivo, utilize o comando `
 
 Para enviar um arquivo para o dispositivo, execute o seguinte comando:
 
-```bash
+```bash filename="Terminal"
 adb push arquivo.txt /sdcard/
 ```
 
 Para baixar um arquivo do dispositivo, execute o seguinte comando:
 
-```bash
+```bash filename="Terminal"
 adb pull /sdcard/arquivo.txt
 ```
 
@@ -34,13 +36,13 @@ O ADB permite redirecionar portas entre o dispositivo e o computador. Isso é ú
 
 Para redirecionar a porta `8080` do dispositivo para a porta `8080` do computador, execute o seguinte comando:
 
-```bash
+```bash filename="Terminal"
 adb forward tcp:8080 tcp:8080
 ```
 
 Para fazer o redirecionamento de portas em sentido contrário, execute o seguinte comando:
 
-```bash
+```bash filename="Terminal"
 adb reverse tcp:8080 tcp:8080
 ```
 
@@ -51,6 +53,6 @@ Em alguns casos, pode ser necessário encerrar o processo do servidor do adb e r
 
 Para interromper o servidor do adb, use o comando a baixo. Em seguida, é possível emitir qualquer outro comando do adb para reiniciar o servidor.
 
-```bash
+```bash filename="Terminal"
 adb kill-server
 ```

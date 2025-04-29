@@ -51,7 +51,7 @@ Se tudo ocorrer conforme o esperado, o Burp Suite deve começar a capturar o tr�
 
 Só que não é tão simples assim. O SSL Pinning pode dificultar a interceptação do tráfego, já que o aplicativo não confia no certificado emitido pelo Burp Suite. Para contornar essa situação, é necessário "bypassar" o SSL Pinning.
 
-## Bypass OkHTTPv3
+## Burlando o OkHTTPv3
 Para "bypassar" o SSL Pinning, podemos utilizar ferramentas como o [Frida](/starting/frida) para interceptar as chamadas de verificação de certificado e retornar um valor arbitrário. 
 
 ```js showLineNumbers {7-10}

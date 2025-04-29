@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Fundamentos: AndroidManifest.xml'
+    title: 'Fundamentos: AndroidManifest.xml'
 }
 
 # AndroidManifest.xml
@@ -10,7 +10,7 @@ Em resumo, nele são especificados detalhes importantes, como permissões necess
 ## Nome do Pacote
 O nome do pacote é um identificador único para a aplicação. Ele é usado pelo sistema operacional para identificar a aplicação e garantir que ela seja única no dispositivo. O nome do pacote é definido no atributo `package` da tag `<manifest>`.
 
-```xml
+```xml showLineNumbers {3} filename="AndroidManifest.xml"
 <manifest 
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapp"
@@ -25,7 +25,7 @@ Para cada componente criado no aplicativo, é declarado um elemento XML correspo
 - [`<receiver>`](https://developer.android.com/guide/topics/manifest/receiver-element?hl=pt-br) para cada subclasse de [`BroadcastReceiver`](https://developer.android.com/reference/android/content/BroadcastReceiver?hl=pt-br).
 - [`<provider>`](https://developer.android.com/guide/topics/manifest/provider-element?hl=pt-br) para cada subclasse de [`ContentProvider`](https://developer.android.com/reference/android/content/ContentProvider?hl=pt-br).
 
-```xml
+```xml showLineNumbers filename="AndroidManifest.xml"
 <manifest ... >
     <application ... >
         <activity android:name=".MainActivity" ... />
@@ -37,7 +37,7 @@ Para cada componente criado no aplicativo, é declarado um elemento XML correspo
 ## \<intent-filter>
 Os filtros de _intent_ definem como a aplicação responde a diferentes eventos ou _intent_. Permitem que `Activities` ou `Services` sejam iniciados com base em ações específicas do sistema ou de outros aplicativos.
 
-```xml
+```xml showLineNumbers filename="AndroidManifest.xml"
 <intent-filter>
     <action android:name="android.accessibilityservice.AccessibilityService" />
 </intent-filter>
@@ -48,7 +48,7 @@ Os apps Android precisam pedir acesso aos dados confidenciais do usuário, como 
 
 Cada permissão é identificada por um rótulo exclusivo no arquivo `AndroidManifest.xml` e são divididas em duas categorias: permissões normais e [permissões perigosas](/foundations/android-permissions).
 
-```xml
+```xml showLineNumbers filename="AndroidManifest.xml"
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.CAMERA" />
 ```

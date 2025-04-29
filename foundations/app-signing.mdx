@@ -11,7 +11,7 @@ A assinatura de um APK é um processo que garante que o APK não foi alterado ap
 ## Alinhando o APK
 Após assinar o APK, é necessário realizar o alinhamento dos bytes do arquivo, um processo chamado **zipalign**, que otimiza o APK para ser lido mais eficientemente pelo Android:
 
-```bash
+```bash filename="Terminal"
 zipalign -v 4 myapp-unsigned.apk myapp.apk
 ```
 

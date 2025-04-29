@@ -16,7 +16,7 @@ No mTLS, tanto o cliente quanto o servidor têm um certificado e ambos os lados 
 
 Quando um aplicativo móvel que utiliza mTLS tenta se conectar a um servidor através de um proxy configurado incorretamente, ou sem os certificados TLS necessários, isso pode causar falhas na comunicação. Esse problema ocorre porque o handshake TLS (que é a base para estabelecer uma conexão segura) depende de uma troca bem-sucedida de certificados entre cliente e servidor. Caso essa troca não ocorra ou seja mal configurada, o servidor rejeitará a conexão.
 
-Por exemplo, ao utilizar o [Cloudflare](https://cloudflare.com/) ou o [Akamai](https://www.akamai.com), se o certificado mTLS esperado não for apresentado pelo cliente, o servidor rejeitará a requisição imediatamente. O servidor retornará um HTTP 403 (Forbidden), indicando que a autenticação falhou e o acesso foi negado devido à ausência ou invalidez do certificado enviado pelo cliente.
+Por exemplo, ao utilizar o [Cloudflare](https://cloudflare.com/) ou [Akamai](https://www.akamai.com), se o certificado mTLS esperado não for apresentado pelo cliente, o servidor rejeitará a requisição imediatamente. O servidor retornará um HTTP 403 (Forbidden), indicando que a autenticação falhou e o acesso foi negado devido à ausência ou invalidez do certificado enviado pelo cliente.
 
 ## Armazenamento de Chaves
 Esses certificados podem ser armazenados no keystore do dispositivo, fornecidos dinamicamente em tempo de execução por meio de uma API ou embutidos diretamente no aplicativo. Cada abordagem demanda atenção especial em testes de segurança, pois a má configuração ou exposição desses certificados pode comprometer o mecanismo de mTLS. 
@@ -26,15 +26,17 @@ Por exemplo, no código abaixo, os pares de chave são atribuídos às variávei
 <img src="/img/vulnerabilities/jadx-mtls-cert.png" className="not-prose" />
 
 ## PKCS#12
-O PKCS#12 (Public Key Cryptography Standards #12) é um padrão utilizado para armazenar e transportar informações sensíveis relacionadas à criptografia, como certificados digitais e chaves privadas.
+O PKCS#12 (Public Key Cryptography Standards #12) é um padrão amplamente utilizado para armazenar e transportar informações sensíveis relacionadas à criptografia, como certificados digitais e chaves privadas.
 
-O comando abaixo cria um arquivo PKCS#12 (.pfx) contendo o certificado público e a chave privada:
+Para criar um arquivo PKCS#12 (`.pfx`) contendo o certificado público e a chave privada, utilize o seguinte comando:
 
 ```bash
 openssl pkcs12 -export -out cert.pfx -in pub.pem -inkey private.key
 ```
 
-Será solicitado uma senha para proteger o arquivo do certificado final. Por exemplo, um proxy pode usar esse arquivo para autenticar-se em um servidor ou validar as conexões de clientes que também utilizam mTLS.
+> **Observação**: Para criar o arquivo `.pfx`, é essencial que todos os certificados X.509 necessários para a comunicação estejam disponíveis.
+
+Durante o processo, será solicitada uma senha para proteger o arquivo do certificado final. Esse arquivo pode ser utilizado por um proxy para autenticar-se em um servidor ou validar conexões de clientes que também utilizam mTLS.
 
 ## Certificado TLS do Cliente
 Uma vez com o certificado em mãos é possível importá-lo no Burp Suite. Para isso, acesse a aba `Network` > `TLS` > `Client TLS Certificate` e selecione o arquivo `cert.pfx` gerado anteriormente.

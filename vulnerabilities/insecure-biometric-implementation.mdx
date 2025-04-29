@@ -1,0 +1,58 @@
+import { Canary } from '@/components/ui/canary-icon'
+
+export const metadata = {
+    title: 'Vulnerabilidades: Implementação Insegura de Biometria',
+}
+
+# Implementação Insegura de Biometria <Canary className='inline-flex size-8 text-[hsla(0,0%,53%,1)]' style={{ width: '0.85em', height: '0.85em' }} />
+
+> [!CANARY]
+> Essa é uma versão inicial, e pode conter erros ou informações desatualizadas. O conteúdo está em desenvolvimento e será atualizado conforme necessário.
+
+A autenticação biométrica é um método de autenticação no lado do cliente que utiliza características físicas, como impressões digitais ou reconhecimento facial, para verificar a identidade do usuário. Usar esse tipo de recurso é conveniente para autenticar um usuário antes de executar ações sensíveis, como transferências bancárias ou compras online.
+
+No entanto, a maioria das verificações biométricas ocorre localmente e, assim como qualquer validação realizada apenas no lado do cliente, pode ser ignorada.
+
+[Keystore](/security/keystore).
+
+## Deep Dive: Como funciona a biometria no Android?
+https://source.android.com/security/biometric?hl=pt-br
+
+O código a baixo ilustra como a biometria sem `CryptoObject` é implementada:
+
+```kotlin showLineNumbers {1,22}
+biometricPrompt = BiometricPrompt(
+    this, 
+    executor, 
+    object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+            super.onAuthenticationError(errorCode, errString)
+            Log.e(TAG, "Erro de autenticação: $errString")
+        }
+
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+            super.onAuthenticationSucceeded(result)
+            Log.i(TAG, "Autenticação bem sucedida!")
+        }
+
+        override fun onAuthenticationFailed() {
+            super.onAuthenticationFailed()
+            Log.w(TAG, "Autenticação falhou")
+        }
+    }
+)
+
+promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Verique sua identidade")
+    .setSubtitle("supersecure.app precisa ter certeza que é você")
+    .setNegativeButtonText("Use account password")
+    .build()
+```
+
+## Bypass
+
+
+## Mitigação
+Existem métodos para verificar se a biometria usada é genuína ou não no lado do servidor.
+
+Felizmente, é possível usar o objeto `CryptoObject` durante a inicialicação do `BiometricPrompt`. A chave para criar o `CryptoObject` pode ser armazenada no Keystore
