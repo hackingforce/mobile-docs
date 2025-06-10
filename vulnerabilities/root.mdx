@@ -5,21 +5,32 @@ export const metadata = {
 }
 
 # Detecção de root
-Sabemos que o sistema operacional Android é baseado em UNIX onde ocorre uma segregação de usuários, quando você compra um dispositivo físico, você é um usuário de baixo privilegio, ou seja, tem ações limitadas. O que garante a integridade do ambiente.
+O sistema operacional Android é baseado na arquitetura UNIX, onde a segregação de privilégios é um princípio fundamental de segurança. Por padrão, o usuário final opera com permissões limitadas, o que restringe o acesso a áreas sensíveis do sistema e ajuda a preservar a integridade do ambiente. 
 
-Quando passamos ser um super usuário, podemos fazer o que quisermos. Listar processos, diretórios, abrir portas, usar frameworks de instrumentação como frida, Xposed e etc.
+No entanto, quando o dispositivo é rooteado, o usuário obtém permissões elevadas (superusuário), podendo executar comandos arbitrários, listar processos de outros aplicativos, modificar diretórios protegidos, abrir portas de rede e interagir com frameworks de instrumentação como Frida e Xposed.
 
 > [Download do APK para análise](https://github.com)
 
-## Mitigação
-- **Inspeção de Pacotes Suspeitos:** Para complementar a detecção de root, é fundamental realizar a análise de pacotes instalados no dispositivo. Gerenciadores de superusuário, como `thirdparty.superuser`, `eu.chainfire.supersu`, `com.noshufou.android.su`, e outros conhecidos, devem ser verificados periodicamente. A presença de qualquer pacote relacionado a ferramentas de root deve ser tratada como um indicativo de potencial comprometimento do dispositivo.
+## Verificação de Caminhos Conhecidos
+A detecção de binários e arquivos associados a ferramentas de root é uma abordagem comum. Muitos frameworks populares deixam rastros em locais previsíveis do sistema de arquivos. A simples verificação da existência desses arquivos pode indicar a presença de root.
+
+```bash filename="Terminal"
+/system/bin/su
+/system/xbin/su
+/sbin/su
+/system/app/Superuser.apk
+/system/app/SuperSU.apk
+/system/etc/init.d/99SuperSUDaemon
+/system/bin/.ext/.su
+/system/usr/we-need-root/su.backup
+```
+
+Esses caminhos estão geralmente associados a soluções como SuperSU, Magisk ou custom ROMs com permissões elevadas.
 
 ## Análise Estática
-Como vimos na etapa de [Análise Estática](/starting/sast)...
+Durante a análise estática de aplicativos, é possível identificar a presença de bibliotecas ou funções responsáveis pela verificação de root. Um exemplo comum é a utilização da biblioteca RootBeer:
 
-Ao analisar o código fonte do aplicativo, podemos identificar a verificação de root. No exemplo abaixo, o aplicativo utiliza a biblioteca `RootBeer` para verificar se o dispositivo está rooteado.
-
-```java showLineNumbers
+```java showLineNumbers filename="RootBeer.java"
 RootBeer rootBeer = new RootBeer(context);
 
 if (rootBeer.isRooted()) {
@@ -29,10 +40,14 @@ if (rootBeer.isRooted()) {
 }
 ```
 
+Embora bibliotecas como RootBeer, JailMonkey e etc agilizem a implementação de mecanismos de detecção, é importante ressaltar que seu uso isolado pode não ser suficiente. Essas bibliotecas são de conhecimento público e frequentemente estão entre os primeiros alvos de ferramentas de bypass.
+
+Aplicativos que utilizam bibliotecas de mercado sem qualquer tipo de proteção adicional tendem a ser mais suscetíveis a engenharia reversa. Bibliotecas que não possuem ofuscação, validação em múltiplas camadas ou integração com o backend podem ter seus métodos interceptados ou anulados com facilidade utilizando ferramentas como Frida.
+
 ## Burlando a verificação de root
 Depois de analisar o aplicativo e identificar a verificação de root, podemos usar o frida para interceptar a chamada e retornar um valor falso.
 
-```js showLineNumbers {4}
+```javascript showLineNumbers {4} filename="bypass_root.js"
 Java.perform(() => {
     const rootCheck = Java.use('com.scottyab.rootbeer.RootBeer');
     rootCheck.isRooted.implementation = function() {
@@ -40,3 +55,6 @@ Java.perform(() => {
     };
 });
 ```
+
+## Mitigação
+- **Inspeção de Pacotes Suspeitos:** Para complementar a detecção de root, é fundamental realizar a análise de pacotes instalados no dispositivo. Gerenciadores de superusuário, como `thirdparty.superuser`, `eu.chainfire.supersu`, `com.noshufou.android.su`, e outros conhecidos, devem ser verificados periodicamente. A presença de qualquer pacote relacionado a ferramentas de root deve ser tratada como um indicativo de potencial comprometimento do dispositivo.

@@ -10,14 +10,20 @@ Emular consiste em utilizar um software para criar um ambiente virtual que simul
 
 Essa proteção específica é muito útil para diversas situações, como em aplicativos de jogos para identificar trapaças ou em aplicativos bancários para prevenir fraudes.
 
-## Como identificar um dispositivo emulado
+## Verificação de Propriedades de Build
+Dispositivos emulados geralmente utilizam valores genéricos ou padrões conhecidos nos campos da classe `android.os.Build`. Essas propriedades são definidas durante o processo de build da imagem do sistema operacional Android, ou seja, são configuradas pelo fabricante, desenvolvedor da ROM ou ambiente de emulação antes da instalação no dispositivo.
 
-Existem diversas formas de indentificar se um aplicativo está sendo executado em um ambiente emulado, uma dessas formas inclui:
+Abaixo estão exemplos comuns de propriedades manipuladas no build e verificadas em tempo de execução:
 
-- **Verificação de arquivos e diretórios específicos:** Alguns emuladores possuem arquivos ou estruturas características que podem ser detectadas.
-- **Análise das propriedades do sistema:** Verificar parâmetros como fabricante, modelo e versão do sistema operacional.
-- **Identificação do ID de hardware:** Emuladores frequentemente utilizam IDs genéricos ou padrão.
-- **Detecção de comportamentos incomuns:** Alguns comportamentos ou configurações específicas, como aceleração de processos, podem indicar um ambiente emulado.
+```java showLineNumbers {4,5} filename="EmulatorCheck.java"
+if (Build.FINGERPRINT.startsWith("generic")
+        || Build.FINGERPRINT.startsWith("unknown")
+        || Build.MODEL.contains("google_sdk")
+        || Build.MODEL.contains("Emulator")
+        || Build.MODEL.contains("Android SDK built for x86")) {
+    // Dispositivo emulado detectado
+}
+```
 
 ## Limitações e desafios
 

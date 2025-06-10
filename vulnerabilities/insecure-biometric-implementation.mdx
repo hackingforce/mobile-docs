@@ -2,9 +2,9 @@ import { Canary } from '@/components/ui/canary-icon'
 
 export const metadata = {
     title: 'Vulnerabilidades: Implementação Insegura de Biometria',
+    innerTitle: 'Implementação Insegura de Biometria',
+    canary: true,
 }
-
-# Implementação Insegura de Biometria <Canary className='inline-flex size-8 text-[hsla(0,0%,53%,1)]' style={{ width: '0.85em', height: '0.85em' }} />
 
 > [!CANARY]
 > Essa é uma versão inicial, e pode conter erros ou informações desatualizadas. O conteúdo está em desenvolvimento e será atualizado conforme necessário.
@@ -20,7 +20,7 @@ https://source.android.com/security/biometric?hl=pt-br
 
 O código a baixo ilustra como a biometria sem `CryptoObject` é implementada:
 
-```kotlin showLineNumbers {1,22}
+```kotlin showLineNumbers {1,20} filename="Biometric.kt"
 biometricPrompt = BiometricPrompt(
     this, 
     executor, 
@@ -29,12 +29,10 @@ biometricPrompt = BiometricPrompt(
             super.onAuthenticationError(errorCode, errString)
             Log.e(TAG, "Erro de autenticação: $errString")
         }
-
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
             super.onAuthenticationSucceeded(result)
             Log.i(TAG, "Autenticação bem sucedida!")
         }
-
         override fun onAuthenticationFailed() {
             super.onAuthenticationFailed()
             Log.w(TAG, "Autenticação falhou")
@@ -55,4 +53,15 @@ promptInfo = BiometricPrompt.PromptInfo.Builder()
 ## Mitigação
 Existem métodos para verificar se a biometria usada é genuína ou não no lado do servidor.
 
-Felizmente, é possível usar o objeto `CryptoObject` durante a inicialicação do `BiometricPrompt`. A chave para criar o `CryptoObject` pode ser armazenada no Keystore
+Felizmente, é possível usar o objeto `CryptoObject` durante a inicialicação do `BiometricPrompt`. A chave para criar o `CryptoObject` pode ser armazenada no Keystore.
+
+```kotlin showLineNumbers filename="Biometric.kt"
+val keyGenParameterSpec = KeyGenParameterSpec.Builder(
+    KEY_NAME,
+    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+)
+    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+    .setUserAuthenticationRequired(true)
+    .build()
+```

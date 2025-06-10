@@ -10,14 +10,14 @@ Quando um aplicativo é instalado no Android, o sistema automaticamente atribui 
 
 Na prática, isso significa que, do ponto de vista do sistema operacional, cada aplicativo não pode acessar diretamente os dados ou recursos de outros aplicativos sem autorização explícita. Em resumo, é tratado como se fosse um usuário individual, com permissões e restrições específicas.
 
-```bash
+```bash filename="Terminal"
 adb shell
 ps -A # ou top
 ```
 
 Você verá uma lista de todos os processos em execução no dispositivo, incluido uma coluna com o usuário associado a cada processo, cada um com seu próprio UID e espaço de memória isolado.
 
-```bash
+```bash filename="Terminal"
 su u0_a131
 ```
 

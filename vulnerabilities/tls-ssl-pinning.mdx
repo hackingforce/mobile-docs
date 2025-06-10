@@ -18,7 +18,7 @@ No modelo tradicional de SSL/TLS, os aplicativos confiam em diversas Autoridades
 
 Exemplo de implementação de SSL Pinning em Java:
 
-```java showLineNumbers {9-11}
+```java showLineNumbers {9-11} filename="Pinner.java"
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 
@@ -41,7 +41,7 @@ public class Pinner {
 ## Reverse Proxy
 Após validarmos que o servidor do [Burp Suite](https://portswigger.net/burp/communitydownload) está escutando na porta 8080. Precisamos fazer o redirecionamento do tráfego do Android para o Burp. Para isso, utilizamos o comando `adb reverse`:
 
-```bash
+```bash filename="Terminal"
 adb reverse tcp:8080 tcp:8080
 ```
 
@@ -49,12 +49,12 @@ Se tudo ocorrer conforme o esperado, o Burp Suite deve começar a capturar o tr�
 
 \<imagem-de-falha-no-certificado>
 
-Só que não é tão simples assim. O SSL Pinning pode dificultar a interceptação do tráfego, já que o aplicativo não confia no certificado emitido pelo Burp Suite. Para contornar essa situação, é necessário "bypassar" o SSL Pinning.
+Só que não é tão simples assim. O SSL Pinning pode dificultar a interceptação do tráfego, já que o aplicativo não confia no certificado emitido pelo Burp Suite. Para contornar essa situação, é necessário burlar a pinagem do certificado.
 
 ## Burlando o OkHTTPv3
 Para "bypassar" o SSL Pinning, podemos utilizar ferramentas como o [Frida](/starting/frida) para interceptar as chamadas de verificação de certificado e retornar um valor arbitrário. 
 
-```js showLineNumbers {7-10}
+```javascript showLineNumbers {7-10} filename="bypass_okhttp.js"
 Java.perform(() => {
     const CertificatePinner = Java.use("okhttp3.CertificatePinner");
 
@@ -66,4 +66,16 @@ Java.perform(() => {
       return;
     };
 });
+```
+
+## Proxy Invisível
+Outra abordagem para contornar o SSL Pinning é utilizar um proxy invisível. Essa ferramenta permite interceptar e modificar o tráfego de rede sem a necessidade de...
+
+```bash filename="Terminal"
+iptables -t nat -A OUTPUT -p tcp --dport 443 -j DNAT --to-destination 127.0.0.1:8080
+iptables -t nat -A OUTPUT -p tcp --dport 80 -j DNAT --to-destination 127.0.0.1:8080
+```
+
+```bash filename="Terminal"
+emulator @pentest -http-proxy http://127.0.0.1:8080
 ```

@@ -35,14 +35,18 @@ Uma maneira prática de verificar a presença da `FLAG_SECURE` é enviar o aplic
 
 <img src="/img/vulnerabilities/flag-secure/overview-hidden.png" className='not-prose w-72'/>
 
-Outra abordagem é utilizar o comando `adb` para realizar uma captura de tela diretamente do dispositivo. Se a captura de tela resultar em um arquivo vazio ou inutilizável (como 0 bytes), isso é um forte indicativo de que a `FLAG_SECURE` está sendo aplicada para proteger o conteúdo da tela.
+Outra abordagem é utilizar o `adb` para realizar uma captura de tela diretamente do dispositivo. Se a captura de tela resultar em um arquivo vazio ou inutilizável (como 0 bytes), isso é um forte indicativo de que a `FLAG_SECURE` está sendo aplicada para proteger o conteúdo da tela.
 
-```bash
+```bash filename="Terminal"
 adb shell screencap -p /sdcard/screen.png
 adb pull /sdcard/screen.png
 ```
 
 ![](/img/vulnerabilities/flag-secure/0-bytes.png)
 
-## Bypass
+## Burlando a FLAG_SECURE
+
+```javascript showLineNumbers filename="flag-secure.js"
+
+```
 

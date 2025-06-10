@@ -94,46 +94,46 @@ Converter Smali de volta para Java é uma prática comum durante o processo de e
 
 1. **Recompile os arquivos Smali em um arquivo `.dex`:**  
 
-   ```bash showLineNumbers
-   smali assemble <diretório_smali> -o output.dex
-   ```
+```bash
+smali assemble <diretório_smali> -o output.dex
+```
 
 2. **Converta o arquivo `.dex` em código Java:**  
 
-   ```bash showLineNumbers
-   jadx -d <diretório_destino> output.dex
-   ```  
+```bash
+jadx -d <diretório_destino> output.dex
+```  
 3. **Visualize o Código Java:**  
 
-   O resultado será uma estrutura de pastas contendo os arquivos `.java`. Embora o código gerado nem sempre seja uma representação perfeita do original (especialmente em casos de ofuscação), ele oferece uma base legível para análise.  
+O resultado será uma estrutura de pastas contendo os arquivos `.java`. Embora o código gerado nem sempre seja uma representação perfeita do original (especialmente em casos de ofuscação), ele oferece uma base legível para análise.  
 
 ## APK para Smali  
 
 Quando se trabalha com um aplicativo Android já compilado (`.apk`), a conversão para Smali pode ser feita diretamente utilizando ferramentas como o **[APKTool](https://apktool.org/docs/install)**, que extrai os arquivos Smali de forma organizada.  
 
 1. **Descompilar o APK para Smali:**  
-   
-   ```bash showLineNumbers
-   apktool d app.apk  
-   ```  
+
+```bash
+apktool d app.apk  
+```  
 2. **Modificar os arquivos Smali:**  
-   
-   Edite os arquivos Smali conforme necessário para realizar alterações no comportamento do aplicativo.
+
+Edite os arquivos Smali conforme necessário para realizar alterações no comportamento do aplicativo.
 
 3. **Recompilar o APK:**  
-   
-   ```bash showLineNumbers
-   apktool b myApp  
-   ```
+
+```bash
+apktool b myApp  
+```
 
 4. **Assinar o APK recompilado:**  
-      
-   ```bash showLineNumbers
-   jarsigner -verbose -keystore my-release-key.jks myApp/dist/myApp.apk alias_name  
-   ```
+
+```bash
+jarsigner -verbose -keystore my-release-key.jks myApp/dist/myApp.apk alias_name  
+```
 
 5. **Realizar a instalação do APK:**
-   
-   ```bash showLineNumbers
-   adb install app.apk  
-   ```
+
+```bash
+adb install app.apk  
+```

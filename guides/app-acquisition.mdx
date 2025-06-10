@@ -3,19 +3,19 @@ export const metadata = {
 }
 
 # Adquirindo o Aplicativo
-Utilizar sites de terceiros para realizar o download do aplicativo é um processo não confiável que pode resultar na infeção do aplicativo e consequentemente na infeção do ambiente de teste.
+Utilizar sites de terceiros para realizar o download do aplicativo é um processo não confiável que pode resultar na infecção do aplicativo e consequentemente no comprometimento do ambiente de teste.
 
 ## Google Play Store
-A maneira mais segura de adquirir o aplicativo é através da [Google Play Store](https://play.google.com/). A loja oficial do Android é a única "fonte confiável" para baixar aplicativos Android. A Google Play Store verifica todos os aplicativos antes de disponibilizá-los para download, garantindo que eles não contenham malware ou qualquer outro tipo de ameaça.
+A maneira mais segura de adquirir o aplicativo é através da [Google Play Store](https://play.google.com/). A loja oficial do Android é a única "fonte confiável" para baixar aplicativos. A Loja verifica todos os aplicativos antes de disponibilizá-los para download, garantindo que eles não contenham malware ou qualquer outro tipo de ameaça.
 
 Vamos acessar o site [Apps Android no Google Play](https://play.google.com/) e procurar pelo aplicativo que desejamos baixar.
 
 <img src="/img/guides/app-acquisition/google-play-id.png" className="!border-none"/>
 
-Agora que sabemos o nome do pacote...
+Ao abrir a página do aplicativo, o nome do pacote pode ser visualizado na URL, sendo exibido logo após o parâmetro `?id=`. Essa informação deve ser registrada com atenção, pois será utilizada em etapas posteriores da análise, como no uso de ferramentas de automação e identificação do aplicativo.
 
-## Como baixar o APK
-Antes de qualquer coisa, é necessário criar um dispositivo virtual utilizando uma imagem que contenha a Google Play Store:
+## Configurando o Dispositivo Virtual
+Antes de qualquer coisa, é necessário criar um dispositivo virtual utilizando uma imagem que contenha a Google Play Store. No exemplo abaixo, o Android 11.0 (Google Play) é utilizado com a API Level 30 de ABI arm64-v8a.
 
 | Release Name | API Level | ABI           | Target                    |
 |--------------|-----------|---------------|---------------------------|
@@ -23,22 +23,24 @@ Antes de qualquer coisa, é necessário criar um dispositivo virtual utilizando 
 
 <img src="/img/guides/app-acquisition/google-play-api.png" className="!border-none"/>
 
-Todas as aplicações no ambiente Android são salvas no `/data/app/`. No entanto, usuários comuns não têm permissão para listar as informações contidas dentro desse diretório. Dessa forma vamos utilizar o Package Manager para extrair o caminho completo da aplicação. Execute:
+Após iniciar o dispositivo virtual, acesse a Google Play Store e faça a instalação do aplicativo desejado.
 
-```bash
-adb shell pm path com.example.app123
+Todas as aplicações no ambiente Android são salvas no `/data/app/`. No entanto, usuários comuns não têm permissão para listar as informações contidas dentro desse diretório. Dessa forma vamos utilizar o Package Manager (PM) para extrair o caminho completo da aplicação. Execute:
+
+```bash filename="Terminal"
+adb shell pm path com.whatsapp
 ```
 
 ## Copiando o APK
 Agora que temos o caminho completo da aplicação, vamos copiar o APK para o ambiente de teste. Execute:
 
-```bash
-adb pull /data/app/com.example.app123-1/base.apk
+```bash filename="Terminal"
+adb pull /data/app/~~Y28-2Gnz_hlc4bdSHvLJOA==/com.whatsapp-u_k5sTjhJ-nREe6L_e8YzQ==/base.apk
 ```
 
 Alguns aplicativos podem ter mais de um APK devido à necessidade de otimização para diferentes dispositivos, configurações ou idiomas. Essa abordagem ajuda a reduzir o tamanho do aplicativo para os usuários finais. Para lidar com essa estrutura, é essencial copiar todos os APKs. Para facilitar esse processo, criamos um alias no nosso `.zshrc` que simplifica a operação.
 
-```bash showLineNumbers
+```zsh showLineNumbers filename=".zshrc"
 function apkpull() {
   [[ -z "$1" ]] && { echo "Usage: apkpull <package>"; return 1; }
   adb shell pm path $1 | cut -d: -f2 | tr -d '\r' | xargs -I {} adb pull {} > /dev/null 2>&1
@@ -48,18 +50,18 @@ function apkpull() {
 
 Agora, basta executar:
 
-```bash
-apkpull com.example.app123
+```bash filename="Terminal"
+apkpull com.whatsapp
 ```
 
 A partir desse ponto, já temos o aplicativo para realização dos testes. Basta iniciar o dispositivo virtual _rootado_ e realizar o processo de instalação normalmente.
 
-```bash
+```bash filename="Terminal"
 adb install base.apk
 ```
 
 ou no caso de múltiplos APKs:
 
-```bash
+```bash filename="Terminal"
 adb install-multiple *.apk
 ```

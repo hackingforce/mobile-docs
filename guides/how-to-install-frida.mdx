@@ -15,19 +15,19 @@ O Frida possui dois componentes principais: o `frida-server`, que é executado n
 
 Primeiramente, vamos baixar a CLI do Frida.
 
-```bash
+```bash filename="Terminal"
 pip install frida-tools
 ```
 
 Em seguida, baixe a última versão do `frida-server` na [página de releases](https://github.com/frida/frida/releases) e descompacte-o.
 
-```bash
+```bash filename="Terminal"
 unxz frida-server.xz
 ```
 
 Em seguida, copie o arquivo para o dispositivo Android e execute-o.
 
-```bash
+```bash filename="Terminal"
 adb root
 adb push frida-server /data/local/tmp
 adb shell "chmod 755 /data/local/tmp/frida-server"
@@ -36,7 +36,7 @@ adb shell "/data/local/tmp/frida-server &"
 
 ## Validando a Instalação
 Agora, no seu desktop, é hora de garantir que o básico está funcionando. Execute:
-```bash
+```bash filename="Terminal"
 frida-ps -Uai
 ```
 
